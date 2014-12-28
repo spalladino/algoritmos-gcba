@@ -1,0 +1,287 @@
+
+\usepackage[spanish]{babel}
+\usepackage[ansinew]{inputenc}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+
+\title{Procedimientos y Funciones}
+\author{Algoritmos y Estructuras de Datos \\
+Programación Estructurada}
+\date{}
+
+\newcommand{\pseudohrule}{\vskip 5pt \hrule}
+
+\newenvironment{pseudo}[1][\normalsize]{
+\begin{figure}
+#1
+\begin{semiverbatim}
+}{
+\end{semiverbatim}
+\normalsize
+\end{figure}
+}
+
+\setlength{\parskip}{3pt plus 1pt minus 1pt}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Repaso}
+
+\uncover<1->{
+\begin{block}{Especificación}
+La especificación de un algoritmo es un contrato entre el programador y el usuario en donde se definen 
+cuales son los datos de entrada, la precondición y la postcondición del mismo.
+\end{block}
+}
+
+\uncover<2->{
+\begin{block}{Correctitud}
+Un algoritmo es correcto cuando siempre que vale la precondición podemos asegurar que el programa termina y la postcondición se cumple.
+\end{block}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Procedimientos}
+
+\uncover<1->{
+\begin{block}{Procedimientos}
+Un procedimiento es una unidad de código que aísla una parte de un cómputo. Es un programa dentro de otro programa, que actúa sobre una determinada entrada.
+\end{block}
+}
+
+\uncover<2->{
+\begin{itemize}
+\item Permite partir un programa grande en procedimientos permite analizarlo y resolverlo más fácilmente
+\item Su uso produce código más claro y conceptualmente más fácil de entender
+\item Pueden ser reusados dentro del programa o incluso en otro
+\item \alert<3->{No olvidarse la especificación del procedimiento!}
+\end{itemize}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Implementando}
+
+Vamos a aplicar lo visto de procedimientos para resolver el siguiente problema escribiendo el pseudocódigo del siguiente programa:
+
+\begin{block}{Enunciado}
+Dado un arreglo de palabras, se quiere devolver una frase formada por todas las palabras pasadas a plural.
+\end{block}
+
+\uncover<2->{
+En lugar de intentar resolver todo el problema junto, vamos a ir descomponiéndolo iterativamente en partes cada vez más pequeñas. A esto se lo llama \textbf{análisis top-down}.
+}
+
+\uncover<3->{
+Lo contrario, que resulta de resolver primero las partes más pequeñas, e ir construyendo 'hacia arriba', se denomina \textbf{bottom-up}.
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Especificando}
+
+Recordemos siempre que lo primero ante un problema es especificarlo, de manera de tener claro \textbf{qué} es lo que tenemos que hacer, para luego poder concentrarnos en \textbf{cómo} hacerlo.
+
+\begin{pseudo}[\small]
+Concatenar las palabras pasadas a plural
+Entrada: arreglo de strings palabras
+Pre:  el arreglo es no vacío, 
+      cada string contiene una palabra
+Post: salida es un string con las palabras \alert<2>{pasadas a plural} 
+       unidas por espacios,
+      \uncover<3->{\alert{una palabra 'p' está pasada a plural 
+       si termina en 's' y 'p' terminaba en vocal, 
+       o si termina en 'es' y 'p' terminaba en consonante}}
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resolución top-down}
+
+Teniendo la especificación en mano, podemos empezar a concentrarnos en cómo resolver el problema.
+
+\begin{pseudo}[\small]
+Concatenar las palabras pasadas a plural
+Entrada: arreglo de strings \textit{palabras} ...
+\pseudohrule
+\textit{plurales} = string[longitud(palabras)]
+\textit{indice} = 0
+para cada \textit{palabra} en \textit{palabras}
+    plurales[indice] = \alert{obtenerPlural(}\textit{palabra}\alert<2>{)}
+    indice++
+fin
+devolver \alert<2>{concatenar(}\textit{plurales}\alert<2>{)}
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resolución top-down}
+
+Tenemos que completar entonces los siguientes procedimientos:
+\begin{itemize}
+\item obtenerPlural
+\item concatenar
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Obtener plural}
+
+Como siempre, empezamos por la especificación del procedimiento:
+
+\begin{pseudo}[\small]
+Procedimiento obtenerPlural
+Pasa una palabra a plural
+Entrada: string \textit{palabra}
+Pre:  \textit{palabra} es no vacía y tiene solo caracteres de la a-z
+Post: la salida termina en 's' si \textit{palabra} terminaba en vocal, 
+      o termina en 'es' si \textit{palabra} terminaba en consonante
+\end{pseudo}
+
+\uncover<2->{Necesitamos que el procedimiento \textbf{devuelva un valor} al código que lo llamó, en este caso, la palabra en plural.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Funciones}
+
+A los procedimientos que devuelven un valor al código que los llamó, es decir, que generan una salida, los vamos a llamar \textbf{funciones}.
+
+Los vamos a notar igual que los procedimientos, pero indicando cuál es el tipo de valor de retorno.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Función obtener plural}
+
+Versión obtenerPlural como función:
+
+\begin{pseudo}[\small]
+\alert{Función} obtenerPlural
+Pasa una palabra a plural
+Entrada: string \textit{palabra}
+\alert{Salida:  string}
+Pre:  \textit{palabra} es no vacía y tiene solo caracteres de la a-z
+Post: la salida termina en 's' si \textit{palabra} terminaba en vocal, 
+      o termina en 'es' si \textit{palabra} terminaba en consonante
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Función obtener plural}
+
+Y ahora podemos completar el cuerpo de la función:
+
+\begin{pseudo}[\small]
+Función obtenerPlural
+Pasa una palabra a plural
+Entrada: string \textit{palabra}
+Salida:  string ...
+\pseudohrule
+si terminaEnVocal(\textit{palabra})
+  devolver palabra + 's'
+si no
+  devolver palabra + 'es'
+fin
+\end{pseudo}
+
+\uncover<2>{Tendríamos que implementar ahora 'terminaEnVocal'. En un análisis top-down es común que vayan apareciendo funciones o procedimientos cada vez más pequeños hasta completar la implementación.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Función concatenar}
+
+Por último, tenemos que escribir la función concatenar.
+
+\begin{pseudo}[\small]
+Función concatenar
+Concatena los strings de un arreglo separándolos con espacios
+Entrada: string[] palabras
+Salida:  string
+Pre:  los strings del arreglo de entrada son no nulos
+Post: la salida es igual a concatenar los strings intercalando espacios
+      devuelve el string vacío si el arreglo es vacío
+\pseudohrule
+string resultado = ''
+para cada \textit{palabra} en \textit{palabras}
+    resultado = resultado + palabra
+    si no era la última palabra
+        resultado = resultado + ' '
+    fin
+fin
+devolver resultado
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Versión final}
+
+\begin{pseudo}[\small]
+Concatenar las palabras pasadas a plural
+Entrada: arreglo de strings palabras
+\uncover<3>{\alert{Salida: string}}
+Pre:  el arreglo es no vacío, 
+      cada string contiene una palabra
+Post: salida es un string con las palabras pasadas a plural
+       unidas por espacios,
+      una palabra 'p' está pasada a plural 
+       si termina en 's' y 'p' terminaba en vocal, 
+       o si termina en 'es' y 'p' terminaba en consonante
+\pseudohrule
+string[] \textit{plurales}
+int \textit{indice} = 0
+para cada \textit{palabra} en \textit{palabras}
+    plurales[indice] = \alert<2>{obtenerPlural(}\textit{palabra}\alert<2>{)}
+	indice++
+fin
+\alert<3>{devolver} \alert<2>{concatenar(}\textit{plurales}\alert<2>{)}
+\end{pseudo}
+
+\uncover<3>{Notar que el \texttt{main} puede ser también una función que devuelve un valor!}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resumiendo...}
+
+\begin{itemize}
+\item Procedimientos
+\item Funciones
+\item Análisis top-down vs bottom-up
+\end{itemize}
+
+\end{frame}
+
+\end{document}
+

@@ -1,0 +1,500 @@
+
+\usepackage[spanish]{babel}
+\usepackage[ansinew]{inputenc}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+
+\title{Estructuras de Datos\\ Colecciones Ordenadas}
+\author{Algoritmos y Estructuras de Datos \\
+Programación Estructurada}
+\date{}
+
+\newcommand{\pseudohrule}{\vskip 5pt \hrule}
+
+\newenvironment{pseudo}[1][\normalsize]{
+\begin{figure}
+#1
+\begin{semiverbatim}
+}{
+\end{semiverbatim}
+\normalsize
+\end{figure}
+}
+
+\setlength{\parskip}{3pt plus 1pt minus 1pt}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Repaso}
+
+\uncover<1->{
+\begin{block}{Especificación}
+La especificación de un algoritmo es un contrato entre el programador y el usuario en donde se definen 
+cuales son los datos de entrada, la precondición y la postcondición del mismo.
+\end{block}
+}
+
+\uncover<2->{
+\begin{block}{Correctitud}
+Un algoritmo es correcto cuando siempre que vale la precondición podemos asegurar que el programa termina y la postcondición se cumple.
+\end{block}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Procedimientos y Funciones}
+
+\uncover<1->{
+\begin{block}{Procedimientos}
+Un procedimiento es una unidad de código que aísla una parte de un cómputo. Es un programa dentro de otro programa, que actúa sobre una determinada entrada.
+\end{block}
+}
+
+\uncover<2->{
+\begin{block}{Funciones}
+Una función es un procedimiento que produce una salida, es decir, que tiene un valor de retorno de un determinado tipo.
+\end{block}
+}
+
+\uncover<3->{
+\begin{itemize}
+\item Permiten partir un programa grande en componentes más pequeñas
+\item Permiten analizar y resolver un problema más fácilmente
+\item Su uso produce código más claro y conceptualmente más fácil de entender
+\item Pueden ser reusados dentro del programa o incluso en otro
+\item \alert<4->{No olvidarse de su especificación!}
+\end{itemize}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tipos de datos}
+
+Qué \textbf{tipos de datos} conocemos hasta ahora?
+
+\uncover<2->{Venimos usando los tipos de datos \textbf{básicos}:
+
+\begin{enumerate}
+\item int
+\item float
+\item string
+\item arreglo
+\end{enumerate}
+
+}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Arreglo de...}
+
+Los \textbf{arreglos} son tipos de datos que contienen muchas instancias de algún otro tipo de dato. 
+
+Por ejemplo:
+\begin{itemize}
+\item arreglo de enteros
+\item arreglo de strings
+\item arreglo de arreglo de enteros
+\item etc
+\end{itemize}
+
+\uncover<2>{Así como tenemos el arreglo como tipo básico, podemos construir otras \textbf{estructuras de datos} más complejas que puedan contener muchos elementos.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Y eso para qué...?}
+
+Veamos un ejemplo concreto: queremos hacer un programa \textbf{interactivo} que le pida ingresar al usuario uno a uno los integrantes de un curso, a medida que se van inscribiendo, y que muestre por pantalla la lista ordenada de integrantes ante cada nueva inscripción.
+
+\vskip 5pt
+
+Ejemplo de funcionamiento:
+
+\begin{pseudo}[\small]
+> Ingrese nombre: \textit{Freddie Mercury}
+Inscriptos: Freddie Mercury
+> Ingrese nombre: \textit{Brian May}
+Inscriptos: Brian May, Freddie Mercury
+> Ingrese nombre: \textit{John Deacon}
+Inscriptos: Brian May, Freddie Mercury, John Deacon
+...
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Empecemos}
+
+Nuestro programa ahora no es simplemente una función \texttt{main} que toma una entrada y devuelve una salida, sino que va a tener un determinado estado y va a reaccionar a inputs del usuario ejecutando una determinada función.
+
+\begin{block}{Qué función va a ejecutar ante el input del usuario?}<2->
+Función \texttt{inscribir} que toma como parámetro un \texttt{string integrante} y devuelve un \texttt{arreglo de string} con todos los inscriptos ordenados.
+\end{block}
+
+\begin{block}{Cómo va a estar compuesto el \textit{estado} del programa al terminar cada ejecución de la función \texttt{inscribir}?}<3->
+El programa va a tener que guardar cuál es la lista de inscriptos hasta el momento, para poder agregar uno nuevo y mostrar la lista completa ante la siguiente invocación de \texttt{inscribir}.
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Especificando}
+
+Especifiquemos \texttt{inscribir} en función de \alert{cómo afecta el estado} del programa.
+
+\begin{pseudo}[\small]
+Función inscribir
+Inscribe a un nuevo integrante y devuelve la lista ordenada
+Entrada: string nuevo
+Salida:  arreglo de strings
+Pre:  la entrada es no vacía
+      \alert<2>{la lista existente está ordenada}
+Post: la salida es la nueva lista de integrantes ordenada      
+      \alert<2>{modifica la lista agregando ordenado al nuevo integrante}
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Invariante}
+
+Observemos que, al igual que un ciclo, nuestro programa cumple un \textbf{invariante}:
+
+\begin{block}{Invariante}
+La lista de integrantes contiene a todos los inscriptos hasta el momento \textit{en orden}.
+\end{block}
+
+\uncover<2>{Si pensamos nuestro programa como una entidad a la que le ejecutamos funciones, esta es una propiedad que se cumple \alert{siempre}, independientemente de cómo invoquemos sus funciones.
+
+Y tiene los mismos beneficios que el invariante de ciclo: nos permite comprender más fácilmente la ejecución del programa.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Implementando}
+
+Hecha la salvedad, concentrémonos en la implementación de la función inscribir:
+
+\begin{pseudo}[\small]
+Función inscribir
+Entrada: string nuevo
+Salida:  arreglo de strings
+...
+\pseudohrule
+indice = \alert<2>{buscarIndice(}nuevo, inscriptos\alert<2>{)}
+inscriptos = \alert<2>{insertar(}nuevo, indice, inscriptos\alert<2>{)}
+\end{pseudo}
+
+\uncover<2>{Tenemos que implementar las funciones \alert{buscarIndice} e \alert{insertar}.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Función buscarIndice}
+
+Empecemos por pensar qué tiene que hacer esta función: tiene que buscar el índice en el que vamos a \textbf{insertar} el nuevo inscripto en nuestra lista, de manera que quede ordenada.
+
+Veamos algunos ejemplos:
+
+\begin{pseudo}[\small]
+> buscarIndice('F', ['A','C','G','M'])
+2
+
+> buscarIndice('F', ['H','K','T'])
+0
+
+> buscarIndice('F', ['A','B','D'])
+3
+
+> buscarIndice('F', [])
+0
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Especificando buscarIndice}
+
+Ahora que tenemos claro qué tiene que hacer \texttt{buscarIndice}, pasemos a escribir su especificación.
+
+\begin{pseudo}[\small]
+Función buscarIndice
+Devuelve en qué posición debe insertarse el nuevo string en el 
+arreglo para que resulte ordenado
+Entrada: string \textit{nuevo}, string[] \textit{inscriptos}
+Salida:  entero \textit{indice}
+Pre:  \textit{nuevo} es un string no vacío
+      \textit{inscriptos} se encuentra ordenado
+Post: \textit{nuevo} es mayor o igual a todos los elementos de \textit{inscriptos}
+       anteriores a \textit{indice}, y menor o igual a todos los elementos 
+       a partir de \textit{indice}
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Implementando buscarIndice}
+
+Lista la especificación, pasemos a implementarla:
+
+\begin{pseudo}[\small]
+Función buscarIndice
+Entrada: string \textit{nuevo}, string[] \textit{inscriptos}
+Salida:  entero \textit{indice}
+\pseudohrule
+para indice de 0 a longitud(inscriptos)-1
+  si nuevo > inscriptos[indice]
+    devolver indice
+  fin
+fin
+\end{pseudo}
+
+\uncover<2>{Cumple esta función con los casos de prueba que planteamos anteriormente? Y con la especificación?}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Función insertar}
+
+Veamos ahora la función \texttt{insertar}. Esta función debe insertar el elemento dado en la posición indicada del vector. 
+
+Por ejemplo:
+
+\begin{pseudo}[\small]
+> insertar('F', 2, ['A','C','G','M'])
+['A','C','F','G','M']
+
+> insertar('F', 0, ['H','K','T'])
+['F','H','K','T']
+
+> insertar('F', 3, ['A','B','D'])
+['A','B','D','F']
+
+> insertar('F', 0, [])
+['F']
+
+> insertar('F', 5, ['A','B','C'])
+\uncover<2>{\alert{ERROR}}
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Especificando insertar}
+
+La especificación de \texttt{insertar} entonces tiene que cubrir tanto la precondición de que el índice sea válido, como que se modifiquen todos los elementos a partir de la inserción. 
+
+\begin{pseudo}[\small]
+Función insertar
+Inserta el elemento nuevo en la posición indicada del arreglo
+Entrada: string \textit{nuevo}, int \textit{indice}, string[] \textit{arreglo}
+Salida:  string[] \textit{arregloNuevo}
+Pre:  \textit{indice} debe estar entre 0 y \textit{arreglo}.length
+Post: para toda posicion menor a \textit{indice}
+        los elementos de \textit{arreglo} y \textit{arregloNuevo} son iguales
+      para toda posicion mayor a \textit{indice}
+        los elementos de \textit{arregloNuevo} son los de la posición anterior 
+        en \textit{arreglo}
+      para la posicion \textit{indice}
+        el elemento de \textit{arregloNuevo} en esa posicion es el 
+        elemento \textit{nuevo}
+      
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Implementando insertar}
+
+Pasemos a implementar la función. Como no podemos agregar un nuevo elemento en el arreglo, tenemos que hacer una copia con una posición más y devolver esa copia.
+
+\begin{pseudo}[\small]
+Función insertar
+Entrada: string \textit{nuevo}, int \textit{indice}, string[] \textit{arreglo}
+Salida:  string[] \textit{arregloNuevo}
+\pseudohrule
+arregloNuevo = string[longitud(arreglo)+1]
+para i de 0 a longitud(arregloNuevo)
+  si i < indice
+    arregloNuevo[i] = arreglo[i]
+  si no, si i == indice
+    arregloNuevo[i] = nuevo
+  si no
+    arregloNuevo[i] = arreglo[i-1]
+  fin
+fin
+devolver arregloNuevo
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Listo!}
+
+Terminamos de escribir el pseudocódigo de las funciones auxiliares que necesitábamos, ya tenemos todo listo.
+
+\uncover<2->{\alert<2>{Pero... está buena nuestra implementación?}}
+
+\uncover<3->{Cada vez que insertamos un nuevo elemento, estamos \textbf{copiando} todo el arreglo. Si son pocos elementos está todo bien, pero si no, es una operación muy costosa.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Cómo lo mejoramos?}
+
+En lugar de un arreglo, podemos buscar una \textit{estructura de datos} que esté mejor preparada que el arreglo para manejar la operación \textbf{insertar}.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Lista}
+
+La \textbf{lista} es una estructura de datos que nos permite insertar elementos en cualquier posición sin necesidad de copiar la colección entera.
+
+Podemos considerar a la \textbf{lista} como un \textit{camino} de elementos, donde solamente conocemos el primer elemento, pero éste conoce al segundo, el segundo conoce al tercero, y así sucesivamente.
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.4]{C07/STLList.png}
+\end{figure}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Operaciones}
+
+La lista tiene, además de las funciones de longitud e indexar que ya tenía el arreglo, las funciones insertar y eliminar:
+
+\begin{itemize}
+\item \textbf{lista[}i\textbf{]}
+\item \textbf{longitud}
+\item \textbf{insertar(}elemento,posicion\textbf{)}
+\item \textbf{eliminar(}posicion\textbf{)}
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Insertar en lista}
+
+La lista nos permite insertar un nuevo elemento en cualquier posición fácilmente.
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.3]{C07/STLListInsert.png}
+\end{figure}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Indexar en lista}
+
+El problema que tiene la lista es que, como no están todos los elementos juntos en memoria, para llegar al elemento \textbf{i} necesitamos recorrer todos los anteriores.
+
+En el arreglo, en cambio, simplemente podemos ir directamente a esa posición.
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.35]{C07/STLListIndex.png}
+\end{figure}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Cómo se modifica nuestro código?}
+
+Ahora ya no tenemos que implementar la función \texttt{insertar}, sino que nos viene dada por la \textit{estructura de datos} lista que vamos a usar para \texttt{inscriptos}.
+
+\begin{pseudo}[\small]
+Función inscribir
+Entrada: string nuevo
+Salida:  \alert<2>{lista} de strings
+\pseudohrule
+indice = buscarIndice(nuevo, inscriptos)
+inscriptos = \alert<1>{inscriptos.insertar(}nuevo, indice\alert<1>{)}
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resumiendo}
+
+Vimos cómo resolver un mismo problema usando dos estructuras de datos distintas: arreglo y lista. Estas estructuras permiten manejar una \textbf{colección ordenada} de elementos de distintas maneras.
+
+Lo importante ahora no es saber \textbf{cómo} implementar cada una de estas estructuras, sino saber las ventajas y desventajas de cada una y \textbf{cuándo} usarlas:
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Comparando}
+
+\begin{block}{Arreglo}
+\begin{itemize}
+\item Tipo básico de datos
+\item Permite acceso inmediato a un elemento dado el índice
+\item Tiene un tamaño fijo, no permitiendo insertar o eliminar elementos una vez construido
+\end{itemize}
+\end{block}
+
+\begin{block}{Lista}
+\begin{itemize}
+\item Para acceder a un elemento dado el índice hace falta recorrer todos los anteriores
+\item Permite insertar o eliminar un elemento de manera muy eficiente
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Y si no nos interesan las colecciones ordenadas? }
+
+\uncover<2->{\textit{Hay otros tipos de estructuras de datos?}}
+
+\uncover<3>{Hay muchísimos tipos de estructuras de datos distintas. La próxima clase vamos a ver \textbf{conjunto} y \textbf{diccionario}.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
+

@@ -1,0 +1,85 @@
+\documentclass[11pt,a4paper]{article}
+
+\pagestyle{empty}
+
+\usepackage{a4wide}
+\usepackage{enumerate}
+\usepackage{amssymb}
+\usepackage[ansinew]{inputenc}
+\usepackage{algorithmic}
+\usepackage{latexsym}
+\usepackage{algorithm}                              
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{listings}
+
+\renewcommand{\algorithmicwhile}{\textbf{mientras}}
+\renewcommand{\algorithmicdo}{\textbf{hacer}}
+\renewcommand{\algorithmicend}{\textbf{fin}}
+\renewcommand{\algorithmicreturn}{\textbf{devolver}}
+                                                     
+\title{Examen Final}
+\author{Curso de Algoritmos y Estructuras de Datos}
+\date{17 de Febrero de 2012}
+
+\setlength{\textwidth}{17cm}
+\setlength{\textheight}{24cm}
+\setlength{\topmargin}{-2cm}               % distance from top of page to begining of text
+\setlength{\topskip}{0cm}                  % between header and text
+\setlength{\oddsidemargin}{-0.5cm}         % odd page left margin
+\setlength{\evensidemargin}{-0.5cm}        % even page left margin
+
+\begin{document}
+\maketitle
+%\textbf{Justifique todas sus respuestas.} \vskip 5pt
+\hrule
+\vskip 5pt
+
+\begin{enumerate}
+\item Dado el siguiente algoritmo, que toma como entrada dos enteros positivos $x$ e $y$:
+\begin{algorithmic}
+\WHILE {$x > 0$}
+  \STATE decrementar $x$ en $1$
+  \STATE incrementar $y$ en $1$
+\ENDWHILE
+\RETURN $y$
+\end{algorithmic}
+
+Se pide:
+\begin{enumerate}
+\item Indicar qué valor devuelve el algoritmo cuando se lo invoca con $x = 2, y = 4$.
+\item Explicar en palabras qué hace el algoritmo (notar la relación entre los valores de entrada y el de salida, hacer más ejemplos de ser necesario).
+\item Dar un nombre adecuado al algoritmo en función del item anterior.
+\item Qué sucede cuando se invoca al algoritmo con $x = -3, y = 2$?
+\item Completar entrada, salida, precondición y postcondición del algoritmo.
+\item Dar el invariante para el único ciclo que tiene el algoritmo.
+\end{enumerate}
+
+\item Responda las siguientes preguntas:
+\begin{enumerate}
+\item Qué es un algoritmo?
+\item Qué es la especificación de un algoritmo?
+\item Cuándo un algoritmo es correcto?
+\item Cuál es la diferencia entre una función y un procedimiento?
+\end{enumerate}
+
+\item \textbf{Justifique} qué estructura de datos usaría en cada uno de los siguientes casos:
+\begin{enumerate}
+\item Guardar la temperatura de 10 ciudades durante una semana.
+\item Mantener un listado de todos los candidatos que se van postulando en una elección.
+\end{enumerate}
+
+\item Indique cuál es el siguiente algoritmo de ordenamiento:
+\begin{lstlisting}[language=Python]
+def sort(array):
+    for i in range(0, len (array)):
+        min = i
+        for j in range(i + 1, len(array)):
+            if array[j] < array[min]:
+                min = j
+        array[i], array[min] = array[min], array[i]
+\end{lstlisting}
+
+\end{enumerate}
+
+\end{document}

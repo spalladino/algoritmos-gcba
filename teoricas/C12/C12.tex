@@ -1,0 +1,339 @@
+
+\usepackage[spanish]{babel}
+\usepackage[ansinew]{inputenc}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+
+\title{Algoritmos de Ordenamiento}
+\author{Algoritmos y Estructuras de Datos \\
+Programación Estructurada}
+\date{}
+
+\newcommand{\pseudohrule}{\vskip 5pt \hrule}
+
+\newenvironment{pseudo}[1][\normalsize]{
+\begin{figure}
+#1
+\begin{semiverbatim}
+}{
+\end{semiverbatim}
+\normalsize
+\end{figure}
+}
+
+\setlength{\parskip}{3pt plus 1pt minus 1pt}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Repaso}
+
+\begin{block}<1->{Algoritmo}
+Un algoritmo es una lista de finita intrucciones que permiten hallar la solución a un problema.
+\end{block}
+
+\begin{block}<2->{Especificación}
+La especificación de un algoritmo es un contrato entre el programador y el usuario en donde se definen 
+cuales son los datos de entrada, la precondición y la postcondición del mismo.
+\end{block}
+
+\begin{block}<3->{Correctitud}
+Un algoritmo es correcto cuando siempre que vale la precondición podemos asegurar que el programa termina y la postcondición se cumple.
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Enunciado}
+
+Dado un arreglo, queremos ordenarlo de manera ascendente.
+
+\begin{pseudo}
+arreglo = [5,2,7,3,7,4,9,1,8,0,2]
+sort(arreglo)
+print arreglo
+> [0,1,2,2,3,4,5,7,7,8,9]
+\end{pseudo}
+
+\uncover<2>{Vamos a estudiar distintos \textbf{algoritmos} que nos permiten realizar esto.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\begin{figure}
+\huge
+\centering
+Insertion sort
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Insertion sort}
+
+Insertion sort mantiene ordenado el principio del arreglo. Al avanzar sobre un nuevo elemento, lo inserta ordenado en la parte ya ordenada, y luego prosigue con el siguiente.
+
+\begin{pseudo}
+Insertion sort
+\pseudohrule
+para cada posicion \textit{i} del arreglo
+  insertar ordenado arreglo[i] en [0..i]
+fin
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Insertando}
+
+Podemos revisar la funcion insertar ordenado para que aproveche que el elemento ya está en el arreglo, y haga los movimientos de elementos al mismo tiempo que busque la posición donde va el nuevo elemento.
+
+\begin{pseudo}
+Inserta el ultimo elemento ordenado en el intervalo
+Entrada: \textit{arreglo}, entero \textit{desde}, entero \textit{hasta}
+Pre:  \textit{desde} y \textit{hasta} son posiciones del arreglo, desde <= hasta
+      \textit{arreglo[desde..hasta-1]} se encuentra ordenado
+Post: \textit{arreglo[desde..hasta]} se encuentra ordenado
+\pseudohrule
+int i = hasta
+mientras desde < i y arreglo[i] < arreglo[i-1]
+  intercambiar i, i-1
+  decrementar i
+fin
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Intercambiando}
+
+Por último, especificamos e indicamos el código de la función \texttt{intercambiar}.
+
+\begin{pseudo}[\small]
+Intercambia los elementos de dos posiciones del arreglo
+Entrada: \textit{arreglo}, entero \textit{i}, entero \textit{j}
+Pre:  \textit{i} y \textit{j} son posiciones del arreglo
+Post: \textit{arreglo[i]} es igual a \textit{arreglo[j]} al entrar al procedimiento
+      \textit{arreglo[j]} es igual a \textit{arreglo[i]} al entrar al procedimiento
+\pseudohrule
+temp = arreglo[i]
+arreglo[i] = arreglo[j]
+arreglo[j] = temp
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Invariante}
+
+Como siempre, y más ahora que los algoritmos van cobrando complejidad, identificamos el invariante de ciclo de insertion sort.
+
+\begin{pseudo}
+Insertion sort
+\pseudohrule
+para cada posicion \textit{i} del arreglo
+  insertar ordenado arreglo[i] en [0..i]
+fin
+\end{pseudo}
+
+\begin{block}{Invariante}<2->
+En la iteración $i$ del ciclo, los elementos de la posición $0$ hasta $i$ inclusive están ordenados entre sí.
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Propiedades}
+
+\begin{itemize}
+\item No requiere espacio adicional
+\item Es estable, respeta el orden previo entre elementos 'iguales'
+\item Realiza muchas comparaciones \uncover<2>{$(n^2)$} e intercambios \uncover<2>{$(n^2)$}
+\item Es adaptativo, realiza menos operaciones si el arreglo ya está ordenado
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\begin{figure}
+\huge
+\centering
+Selection sort
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Selection sort}
+
+Selection sort busca el elemento más chico del arreglo, y lo ubica en la primer posición. Luego, busca el más chico de los restantes para ubicarlo en la segunda posición, y así sucesivamente hasta ordenar todo el arreglo.
+
+\begin{pseudo}
+Selection sort
+\pseudohrule
+para cada posicion \textit{i} del arreglo
+  int k = indice del elemento mas chico en [i..len(arreglo)-1]
+  intercambiar(\textit{i}, \textit{k})
+fin
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Auxiliares}
+
+Como siempre, si hacemos uso de otras funciones que no sean primitivas, tenemos que definirlas.
+
+\begin{pseudo}[\small]
+Devuelve el indice del elemento más chico en el intervalo del arreglo
+Entrada: \textit{arreglo}, entero \textit{desde}, entero \textit{hasta}
+Salida:  entero \textit{i}
+Pre:  \textit{desde} y \textit{hasta} son posiciones del arreglo, desde <= hasta
+Post: \textit{arreglo[i]} es menor o igual a todo otro elemento del arreglo 
+      entre \textit{desde} y \textit{hasta}
+\pseudohrule
+minimo = desde
+para i = desde .. hasta
+  si arreglo[i] < arreglo[minimo]
+    minimo = i
+  fin
+fin
+devolver minimo
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Invariante}
+
+Veamos el invariante de selection sort:
+
+\begin{pseudo}
+Selection sort
+\pseudohrule
+para cada posicion \textit{i} del arreglo
+  int k = indice del elemento mas chico en [i..len(arreglo)-1]
+  intercambiar(\textit{i}, \textit{k})
+fin
+\end{pseudo}
+
+\begin{block}{Invariante}<2->
+En la iteración $i$ del ciclo, los elementos de la posición $0$ hasta $i$ inclusive están ordenados entre sí. Más aún, están en sus posiciones finales.
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Propiedades}
+
+\begin{itemize}
+\item No requiere espacio adicional
+\item No es estable, no respeta el orden entre elementos 'iguales'
+\item Realiza muchas comparaciones \uncover<2>{$(n^2)$} 
+\item Pero pocos intercambios \uncover<2>{$(n)$}
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\begin{figure}
+\huge
+\centering
+Bubble sort
+\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Bubble sort}
+
+En bubble sort los elementos más chicos 'burbujean' hacia el comienzo del arreglo. Consiste en varias pasadas sobre el arreglo: en cada una, se intercambian dos elementos consecutivos que estuvieran desordenados. El algoritmo termina cuando el arreglo está ordenado, lo que sucede en a lo sumo $n$ pasadas.
+
+\begin{pseudo}
+Bubble sort
+\pseudohrule
+para \textit{i} = 0 .. n-1
+  para \textit{j} = n-1 .. i
+    si arreglo[j] < arreglo[j-1]
+      intercambiar j, j-1
+    fin
+  fin
+fin
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Invariante}
+
+Observemos que el invariante es el que nos permite que el ciclo interno recorra menos posiciones.
+
+\begin{pseudo}
+Bubble sort
+\pseudohrule
+para \textit{i} = 0 .. n-1
+  para \textit{j} = n-1 \alert{.. i}
+    si arreglo[j] < arreglo[j-1]
+      intercambiar j, j-1
+    fin
+  fin
+fin
+\end{pseudo}
+
+\begin{block}{Invariante}<2->
+En la iteración $i$ del ciclo, los elementos de la posición $0$ hasta $i$ inclusive están ordenados entre sí, y están en sus posiciones finales.
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Propiedades}
+
+\begin{itemize}
+\item No requiere espacio adicional
+\item Es estable, respeta el orden previo entre elementos 'iguales'
+\item Realiza muchas comparaciones \uncover<2>{$(n^2)$} e intercambios \uncover<2>{$(n^2)$}
+\item Es adaptativo, realiza menos operaciones si el arreglo ya está ordenado
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Referencias}
+
+\begin{itemize}
+\item Animaciones, pseudocódigo e invariantes (en inglés) \\
+http://www.sorting-algorithms.com/
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

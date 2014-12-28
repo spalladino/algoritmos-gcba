@@ -1,0 +1,323 @@
+
+\usepackage[spanish]{babel}
+\usepackage[ansinew]{inputenc}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+
+\title{Introducción a los Procedimientos}
+\author{Algoritmos y Estructuras de Datos \\
+Programación Estructurada}
+\date{}
+
+\newcommand{\pseudohrule}{\vskip 5pt \hrule}
+
+\newenvironment{pseudo}[1][\normalsize]{
+\begin{figure}
+#1
+\begin{semiverbatim}
+}{
+\end{semiverbatim}
+\normalsize
+\end{figure}
+}
+
+\setlength{\parskip}{3pt plus 1pt minus 1pt}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Repaso}
+
+\uncover<1->{
+\begin{block}{Especificación}
+La especificación de un algoritmo es un contrato entre el programador y el usuario en donde se definen 
+cuales son los datos de entrada, la precondición y la postcondición del mismo.
+\end{block}
+}
+
+\uncover<2->{
+\begin{block}{Correctitud}
+Un algoritmo es correcto cuando siempre que vale la precondición podemos asegurar que el programa termina y la postcondición se cumple.
+\end{block}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Volviendo a los orígenes}
+
+Recordemos el algoritmo que teníamos para armar la mesa de ping pong la primera clase.
+
+\begin{pseudo}
+Armar una mesa de ping-pong
+Entrada: pintura verde, tablón, cuatro patas, red
+Pre: la pintura queda uniforme en a lo sumo 2 manos, 
+     el tablón mide 2.7m * 1.5m
+Post: la mesa es verde, tiene una red, mide 2.7m * 1.5m
+\pseudohrule
+1. Pintar el tablón de color verde
+2. Esperar a que seque la pintura
+3. Si la pintura no quedó uniforme, volver al paso 1
+4. Para cada una de las cuatro patas: clavar la pata a la mesa
+5. Colocar la red
+\end{pseudo}
+
+\uncover<2->{Qué pasa si alguien no sabe como pintar? Tendríamos que dar instrucciones para eso también.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Pintando}
+
+Cuáles serían las instrucciones para \textit{pintar}?
+
+\begin{pseudo}
+1. Sumergir el pincel en la pintura y retirarlo
+2. Escurrir el exceso de pintura
+3. Pasar el pincel sobre la superficie a pintar
+4. Repetir mientras quede superficie sin pintar
+\end{pseudo}
+
+\uncover<2->{Tenemos que integrarlas en nuestras instrucciones para la mesa de ping pong.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Detallando el armado de la mesa}
+
+Nuestro algoritmo para armar la mesa quedaría ahora así:
+
+\begin{pseudo}
+Armar una mesa de ping-pong
+Entrada: pintura verde, tablón, cuatro patas, red
+Pre: la pintura queda uniforme en a lo sumo 2 manos, 
+     el tablón mide 2.7m * 1.5m
+Post: la mesa es verde, tiene una red, mide 2.7m * 1.5m
+\pseudohrule
+\alert<1>{1. Sumergir el pincel en la pintura verde y retirarlo
+2. Escurrir el exceso de pintura
+3. Pasar el pincel sobre el tablón
+4. Repetir mientras quede tablón sin pintar}
+5. Esperar a que seque la pintura
+6. Si la pintura no quedó uniforme, volver al paso 1
+7. Para cada una de las cuatro patas: \alert<3>{clavar la pata a la mesa}
+8. \alert<3>{Colocar la red}
+\end{pseudo}
+
+\uncover<2->{Deberíamos hacer lo mismo con otras partes del algoritmo para que quede lo suficientemente detallado.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Mirando el algoritmo}
+
+Un algoritmo así sería mucho más detallado, pero es efectivamente más claro?
+
+Al mezclar en un mismo algoritmo las instrucciones para distintas tareas, se pierde la noción de qué es lo que hace el algoritmo principal.
+
+Pero por otro lado, puede que necesitemos aclarar cómo llevar a cabo ciertas tareas.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Procedimientos}
+
+Vamos a separar las distintas tareas en \textbf{procedimientos}!
+
+\begin{block}{Procedimientos}
+Un procedimiento es una unidad de código que aísla una parte de un cómputo. Es un programa dentro de otro programa.
+\end{block}
+
+\uncover<2->{Los procedimientos permiten dividir la solución de un problema en la solución de problemas más simples, y permiten ordenar conceptualmente el código de forma que sea más fácil de entender.}
+
+\uncover<3->{Podemos decir entonces que \textit{pintar la mesa} es un \textbf{procedimiento} que se usa al \textit{armar la mesa de ping-pong}.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Usando el procedimiento pintar}
+
+\begin{pseudo}[\small]
+Armar una mesa de ping-pong
+Entrada: pintura verde, tablón, cuatro patas, red
+Pre: la pintura queda uniforme en a lo sumo 2 manos, 
+     el tablón mide 2.7m * 1.5m
+Post: la mesa es verde, tiene una red, mide 2.7m * 1.5m
+\pseudohrule
+1. Pintar el tablón de color verde
+2. Esperar a que seque la pintura
+3. Si la pintura no quedó uniforme, volver al paso 1
+4. Para cada una de las cuatro patas: clavar la pata a la mesa
+5. Colocar la red
+\end{pseudo}
+
+\begin{pseudo}[\small]
+\textbf{Procedimiento} pintar el tablón de color verde
+\pseudohrule
+1. Sumergir el pincel en la pintura verde y retirarlo
+2. Escurrir el exceso de pintura
+3. Pasar el pincel sobre el tablón
+4. Repetir mientras quede tablón sin pintar
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Reusabilidad}
+
+Además de la claridad del código, separar el algoritmo en procedimientos permite \textbf{reusar} las partes del código extraídas en otra parte del programa.
+
+Supongamos que tuviéramos que pintar de blanco las divisiones de la mesa de ping-pong, no necesitamos volver a enseñarle a la persona que está ejecutando el algoritmo cómo pintar, pues ya tiene las instrucciones en un procedimiento separado.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Reusabilidad}
+
+Pero podemos efectivamente reusar el procedimiento tal como está ahora para pintar una parte del tablón de blanco? Veamos...
+
+\begin{pseudo}
+\textbf{Procedimiento} pintar el tablón de color verde
+\pseudohrule
+1. Sumergir el pincel en la \alert<3>{pintura verde} y retirarlo
+2. Escurrir el exceso de pintura
+3. Pasar el pincel sobre \alert<3>{el tablón}
+4. Repetir mientras quede tablón sin pintar
+\end{pseudo}
+
+\uncover<2->{Este procedimiento no nos sirve para pintar los bordes del tablón de color blanco, pues ya tiene \textbf{fijados} los datos con los que trabaja, tomándolos directamente del programa principal.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Entrada de un procedimiento}
+
+El procedimiento \textit{pintar} es el mismo independientemente de qué querramos pintar y con qué color de pintura. Podemos escribir entonces un procedimiento \textit{pintar} genérico al cual le indiquemos \textit{qué superficie pintar} y \textit{con qué pintura}.
+
+Los procedimientos entonces tendrán una \textbf{entrada} sobre la cual trabajan al igual que el programa.
+
+\begin{pseudo}
+\textbf{Procedimiento} \alt<1>{pintar el tablón de color verde}{pintar}
+\only<2->{\alert{Entrada: superficie a pintar, pintura}}
+\pseudohrule
+1. Sumergir el pincel en \alert{\alt<1>{la pintura verde}{la pintura dada}} y retirarlo
+2. Escurrir el exceso de pintura
+3. Pasar el pincel sobre \alert{\alt<1>{el tablón}{la superficie a pintar}}
+4. Repetir mientras quede superficie sin pintar
+\end{pseudo}
+
+\uncover<3->{Podemos ahora \textit{pintar el tablón con pintura verde} o \textit{pintar los bordes del tablón con pintura blanca}. Incluso podríamos \textit{pintar una pared con pintura naranja} si tuviésemos un algoritmo para construir una casa.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Reescribiendo el programa original}
+
+\begin{pseudo}[\small]
+Armar una mesa de ping-pong
+Entrada: \alert<2>{pintura verde}, \alert<3>{tablón}, cuatro patas, red
+Pre: la pintura queda uniforme en a lo sumo 2 manos, 
+     el tablón mide 2.7m * 1.5m
+Post: la mesa es verde, tiene una red, mide 2.7m * 1.5m
+\pseudohrule
+1. Pintar \alert<3>{el tablón} con \alert<2>{la pintura verde}
+2. Esperar a que seque la pintura
+3. Si la pintura no quedó uniforme, volver al paso 1
+4. Para cada una de las cuatro patas: clavar la pata a la mesa
+5. Colocar la red
+\end{pseudo}
+
+\begin{pseudo}[\small]
+\textbf{Procedimiento} pintar
+Entrada: \alert<3>{superficie a pintar}, \alert<2>{pintura}
+\pseudohrule
+1. Sumergir el pincel en \alert<2>{la pintura dada} y retirarlo
+2. Escurrir el exceso de pintura
+3. Pasar el pincel sobre \alert<3>{la superficie a pintar}
+4. Repetir mientras quede superficie sin pintar
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Especificando procedimientos}
+
+Los procedimientos, al igual que los programas en los que se los incluye, tienen una \textbf{precondición} y una \textbf{postcondición} que nos permiten saber cómo usarlos dentro de nuestros programas.
+
+La precondición nos permite saber en qué estado se debe encontrar nuestro programa y qué debe cumplir la entrada para que al invocar el procedimiento valga la postcondición. Son los \textbf{contratos} de uso de los procedimientos.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Especificando pintar}
+
+\begin{pseudo}[\small]
+Armar una mesa de ping-pong
+Entrada: pintura verde, tablón, cuatro patas, red
+Pre: la pintura queda uniforme en a lo sumo 2 manos, 
+     el tablón mide 2.7m * 1.5m, 
+     \only<3>{\alert<3>{hay suficiente pintura para 2 manos}}
+Post: la mesa es verde, tiene una red, mide 2.7m * 1.5m
+\pseudohrule
+1. Pintar el tablón de color verde
+2. Esperar a que seque la pintura
+3. Si la pintura no quedó uniforme, volver al paso 1
+(...)
+\end{pseudo}
+
+\begin{pseudo}[\small]
+\textbf{Procedimiento} pintar el tablón de color verde
+Entrada: superficie a pintar, pintura
+\alert<2->{Pre:  hay suficiente pintura para cubrir la superficie
+Post: la superficie está pintada con la pintura}
+\pseudohrule
+1. Sumergir el pincel en la pintura verde y retirarlo
+(...)
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resumiendo}
+
+\begin{itemize}
+
+\item Un procedimiento es un programa dentro de un programa, que actúa sobre una determinada entrada
+
+\item Partir un programa grande en procedimientos permite analizarlo y resolverlo más fácilmente
+
+\item También genera código más claro y conceptualmente más fácil de entender
+
+\item Los procedimientos así generados pueden ser reusados dentro del programa o incluso en otro
+
+\item \alert<2->{No olvidarse la especificación del procedimiento!}
+
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

@@ -1,0 +1,432 @@
+\usepackage[ansinew]{inputenc}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage[noend]{algorithmic}
+
+\title{Memoria, Estados\\Tipos de datos básicos}
+\author{Algoritmos y Estructuras de Datos \\
+Programación Estructurada}
+\date{}
+
+\newcommand{\pseudohrule}{\vskip 5pt \hrule}
+
+\newenvironment{pseudo}{
+\begin{figure}
+\begin{semiverbatim}
+}{
+\end{semiverbatim}
+\end{figure}
+}
+
+\setlength{\parskip}{3pt plus 1pt minus 1pt}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Repaso}
+
+\uncover<1->{
+\begin{block}{Especificación}
+La especificación de un algoritmo es un contrato entre el programador y el usuario en donde se definen 
+cuales son los datos de entrada, la precondición y la postcondición del mismo.
+\end{block}
+}
+
+\uncover<2->{
+\begin{block}{¿Y qué es un algoritmo?}
+Una lista de finita intrucciones que permiten hallar la solución a un problema.
+\end{block}
+}
+
+\uncover<3->{
+\begin{block}{¿Y qué son la pre y postcondición?}
+Las listas finitas de condiciones que el programa requiere y asegura respectivamente.
+\end{block}
+}
+
+\uncover<4->{
+\begin{block}{¿Cuándo es correcto un algoritmo?}
+Cuando dados los datos de entrada tal que se cumple con la precondición podemos asegurar 
+que el programa termina y la postcondición se cumple.
+\end{block}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Un ejemplo...}
+
+\begin{pseudo}
+Contar la cantidad de letras 'i' que tiene una palabra
+datos de entrada: una palabra
+precondición: la palabra tiene un largo mayor a cero
+postcondición: diremos cuántas 'i' tiene esa palabra
+\pseudohrule
+1. Digo que tengo cero letras 'i'
+2. Tomo la primer letra que aun no haya revisado
+3. Si es una 'i' digo que cuento una 'i' más
+4. Si tengo letras por revisar vuelvo a dos
+5. Digo cuántas 'i' he contado
+\end{pseudo}
+
+\uncover<2->{Tiene una cantidad finita de instrucciones.}
+
+\uncover<3->{Dado el dato de entrada tal que se cumple con la precondición cumpliremos con la postcondición.}
+
+\uncover<4->{Entonces, el algoritmo es correcto.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{La memoria}
+
+\begin{itemize}
+ \item \uncover<1->{Nosotros escribiremos algoritmos que ejecutará una máquina.}
+ \item \uncover<2->{El código del algoritmo (la lista de instrucciones) será cargada
+   en la memoria de la máquina.}
+ \item \uncover<3->{Entonces, los programas (y todos sus componentes) viven en la memoria.}
+\end{itemize}
+
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Componentes de un programa}
+
+ \uncover<1->{
+   \begin{block}{Instrucción}
+   Es una operación que o bien produce una transformación sobre los datos del programa,
+   o produce una modificación en el flujo de la ejecución del mismo.
+    \end{block}
+    }
+
+\uncover<2->{
+  \begin{block}{Variable}
+  Es un nombre que denota una dirección de memoria en la que se almacena un dato.
+  A partir de esta dirección es posible la lectura y/o modificación del dato almacenado
+  \end{block}
+  }
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Componentes de un programa}
+
+\uncover<1->{
+  \begin{block}{Constante}
+  Asi como una variable denota un valor almacenado en
+  memoria y a partir de ella el dato puede ser leído y/o
+  modificado, una constante denota un valor almacenado
+  en memoria que no puede ser modificado por la
+  ejecución del programa.
+  \end{block}
+  }
+
+\uncover<2->{
+  \begin{block}{Literal}
+  Un literal es un valor particular utilizado en la ejecución
+  de un programa.
+  \end{block}
+  }
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Un ejemplo...}
+
+\begin{pseudo}
+Contar la cantidad de letras 'i' que tiene una palabra
+datos de entrada: \alert<2>{una palabra}
+precondición: la palabra tiene un largo mayor a cero
+postcondición: diremos cuántas \alert<2>{letras 'i'} tiene esa palabra
+\pseudohrule
+1. Digo que tengo \alert<5>{cero} \alert<2>{letras 'i'}
+2. Tomo la \alert<2>{primer letra sin revisar}
+3. Si la \alert<2>{letra a revisar}  es una 'i' la 
+   cantidad de \alert<2>{letras 'i'} es \alert<5>{uno} más
+4. Si tengo letras por revisar vuelvo a dos
+5. Digo cuántas \alert<2>{letras 'i'} he contado
+\end{pseudo}
+
+\uncover<1->{¿Cuáles serían las variables?}
+\uncover<3->{¿Cuáles serían las constantes?}
+\uncover<4->{¿Cuáles serían las literales?}
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Un ejemplo...}
+
+\begin{pseudo}
+Contar la cantidad de letras 'i' que tiene una palabra
+datos de entrada: una palabra llamada \alert<1>{p}
+precondición: la palabra \alert<1>{p} tiene un largo mayor a cero
+postcondición: diremos cuántas \alert<1>{cant-letras-i} tiene esa palabra
+\pseudohrule
+1. Digo que tengo cero \alert<1>{cant-letras-i}
+2. Tomo la primer letra sin revisar, \alert<1>{letra-actual}
+3. Si \alert<1>{letra-actual} es una 'i', \alert<1>{cant-letras-i} es uno más
+4. Si tengo letras por revisar vuelvo a dos
+5. Digo cuánto vale \alert<1>{cant-letras-i}
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Estados}
+
+\begin{itemize}
+  \item \uncover<1->{Denominamos estado a un punto en la ejecución de un programa.}
+  \item \uncover<2->{En cada estado guardamos el valor de las variables, de las constantes y cuál será 
+    la próxima instrucción a ejecutarse.}
+  \item \uncover<3->{Para decirlo en otras palabras, un estado es una \textit{foto} en la ejecución de un programa.}    
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Un ejemplo...}
+
+\begin{pseudo}
+Contar la cantidad de letras 'i' que tiene una palabra
+datos de entrada: una palabra llamada palabra
+precondición: la palabra tiene un largo mayor a cero
+postcondición: diremos cuántas letras 'i' tiene esa palabra
+\pseudohrule
+\alert<2>{1. Digo que tengo cero cant-letras-i}
+\alert<4>{2. Tomo la primer letra sin revisar, letra-actual}
+\alert<6>{3. Si letra-actual es una 'i', cant-letras-i es uno más}
+4. Si tengo letras por revisar vuelvo a dos
+5. Digo cuánto vale cant-letras-i
+
+\uncover<1->{\alert<1>{Estado 0: palabra:='pinito'}}
+\uncover<3->{\alert<3>{Estado 1: palabra:='pinito' cant-letras-i:=0}}
+\uncover<5->{\alert<5>{Estado 2: palabra:='pinito' cant-letras-i:=0,  letra=actual:='p'}}
+\uncover<7->{Continuar en clase...}
+\end{pseudo}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Recapitulando}
+
+Un algoritmo es correcto si al cumplirse en su estado inicial con la precondición
+siempre se alcanza un estado final y éste cumple con la postcondición.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tipos de datos}
+
+Todos los datos que manejemos en nuestro programa son de un \textbf{tipo} en particular:
+
+\begin{itemize}
+	\item Valores de verdad
+	\item Números enteros
+	\item Números con decimales
+	\item Palabras
+\end{itemize}
+
+Cada tipo de dato tendrá una serie de operaciones básicas que podemos usar para manipularlos.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tipos de datos}
+
+\uncover<1->{
+  \begin{block}{Valores de verdad (bool)}
+  Denotan el resultado de operaciones lógicas, es decir los valores 
+  \textit{verdadero} (true) y \textit{falso} (false).
+  \end{block}
+  }
+  
+\uncover<2->{
+  \begin{block}{Operaciones entre bool}
+  \begin{itemize}
+   \item{Negación ($no/not$)}
+   \item{Disyunción ($o/or$)}
+   \item{Conjunción ($y/and$)}
+  \end{itemize}
+  \end{block}
+  }
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tipos de datos}
+
+\uncover<1->{
+  \begin{block}{Números enteros (int)}
+  Números sin decimales, pueden estar acotados dependiendo del lenguaje con el que estemos trabajando.
+  \end{block}
+  }
+  
+\uncover<2->{
+  \begin{block}{Operaciones entre int}
+  \begin{itemize}
+   \item{Suma ($+$)}
+   \item{Resta ($-$)}
+   \item{Multiplicación ($*$)}
+   \item{División ($/$)}
+   \item{Incrementar ($++$)}
+   \item{Decrementar ($--$)}
+  \end{itemize}
+  \end{block}
+  }
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tipos de datos}
+
+Comparaciones entre enteros:
+
+\uncover<1->{
+\begin{itemize}
+ \item{Igualdad(==)}
+ \item{Distinto(!=)}
+ \item{Comparación por menor($<$)}
+ \item{Comparación por menor o igual($<$=)}
+ \item{Comparacion por mayor($>$)}
+ \item{Comparacion por mayor o igual($>$=)}
+\end{itemize}
+}
+
+\uncover<2->{¿Qué devuelven estas operaciones como resultado?}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tipos de datos}
+
+\uncover<1->{
+  \begin{block}{Números con punto flotante (float)}
+  Los usamos para representar números con decimales. Tienen una precisión limitada, con lo que a veces podemos encontrarnos con errores de operación al usarlos.
+  \end{block}
+  }
+  
+\uncover<2->{
+  \begin{block}{Operaciones entre números con punto flotante}
+  Las mismas que para números enteros.
+  \end{block}
+  }
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tipos de datos}
+
+\uncover<1->{
+  \begin{block}{Cadenas de caracteres (string)}
+  Son secuencias de símbolos cuyos valores se encierran etre comillas. Por ejemplo: $"$Hola Mundo$"$.
+  \end{block}
+  }
+  
+\uncover<2->{
+  \begin{block}{Operaciones de string}
+  \begin{itemize}
+   \item{Longitud (\texttt{longitud})}
+   \item{Caracter de la posición \texttt{i} en la cadena \texttt{c} (\texttt{c[i]})}
+   \item{Pegar cadenas \texttt{c} y \texttt{d} (\texttt{c + d})}
+   \item{Insertar una cadena en una posición determinada de otra (\texttt{insertar})}
+   \item{...}
+  \end{itemize}
+
+  \end{block}
+  }
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}[fragile]{Un ejemplo...}
+
+\begin{pseudo}
+Contar la cantidad de letras 'i' que tiene una palabra
+Entrada: una palabra llamada \textit{p}
+Pre:  la palabra \textit{p} tiene un largo mayor a cero
+Post: diremos cuántas letras 'i' tiene esa palabra
+\pseudohrule
+1. Digo que tengo cero cant-letras-i
+2. Tomo la primer letra sin revisar, letra-actual
+3. Si letra-actual es una 'i', cant-letras-i es uno más
+4. Si tengo letras por revisar vuelvo a dos
+5. Digo cuánto vale cant-letras-i
+
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Un ejemplo...}
+
+\begin{pseudo}
+Contar la cantidad de letras 'i' que tiene una palabra
+\alert<1>{Entrada: string \textit{p}}
+\alert<2>{Pre: longitud(palabra) > 0}
+\alert<3>{Post: cant-letras-i vale igual que la cantidad de 'i' en \textit{p}}
+\pseudohrule
+\alert<4>{1. cant-letras-i = 0}
+\alert<5>{2. letra-actual = siguienteLetra(p)}
+\alert<6>{3. si letra-actual == 'i', cant-letras-i ++}
+\alert<7>{4. quedanLetras(p), ir a 3}
+\alert<8>{5. devolver cant-letras-i}
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Chequeo de tipos}
+
+\begin{itemize}
+\item \uncover<1->{Algunos lenguajes, los más estrictos, como C++, requieren que cada \textit{variable} esté asociada a un tipo; estos lenguajes realizan un chequeo de tipos (ver que no estemos tratando de sumar números con palabras, por ejemplo) antes de ejecutar el programa y avisan de antemano si existe.}
+\item \uncover<2->{Otros lenguajes, como por ejemplo Python, no tienen esta restricción, pero fallan en tiempo de ejecución si encuentran un error de tipos.}
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resumiendo...}
+
+\begin{itemize}
+\item Componentes de un programa
+\item Memoria
+\item Estados
+\item Tipos de datos
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

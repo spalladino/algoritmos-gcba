@@ -1,0 +1,419 @@
+
+\usepackage[spanish]{babel}
+\usepackage[ansinew]{inputenc}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+
+\title{Clases}
+\author{Algoritmos y Estructuras de Datos \\
+Programación Estructurada}
+\date{}
+
+\newcommand{\pseudohrule}{\vskip 5pt \hrule}
+
+\newenvironment{pseudo}[1][\normalsize]{
+\begin{figure}
+#1
+\begin{semiverbatim}
+}{
+\end{semiverbatim}
+\normalsize
+\end{figure}
+}
+
+\setlength{\parskip}{3pt plus 1pt minus 1pt}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Repaso}
+
+\begin{block}<1->{Algoritmo}
+Un algoritmo es una lista de finita intrucciones que permiten hallar la solución a un problema.
+\end{block}
+
+\begin{block}<2->{Especificación}
+La especificación de un algoritmo es un contrato entre el programador y el usuario en donde se definen 
+cuales son los datos de entrada, la precondición y la postcondición del mismo.
+\end{block}
+
+\begin{block}<3->{Correctitud}
+Un algoritmo es correcto cuando siempre que vale la precondición podemos asegurar que el programa termina y la postcondición se cumple.
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tipos de Dato}
+
+Vimos las primeras clases tipos de datos \textbf{básicos}...
+
+\begin{itemize}
+\item int
+\item float
+\item string
+\item arreglo
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tipos de Dato}
+
+Y luego añadimos algunas \textbf{estructuras de datos} que nos permitían manejar colecciones de otros tipos de dato.
+
+\begin{itemize}
+\item lista
+\item vector
+\end{itemize}
+
+\alert<2>{Es importante notar que las estructuras de datos son, a su vez, \textbf{tipos de dato}.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Definiendo}
+
+\textit{Pero \textbf{qué es} un tipo de dato?}
+
+\begin{block}<2->{Tipo de dato}
+Un tipo de dato no es más que la implementación de un concepto de la vida real.
+\uncover<3->{
+\begin{itemize}
+\item los \texttt{int}s son un subconjunto de los números enteros
+\item los \texttt{float}s son un subconjunto de los números racionales
+\item los \texttt{string}s son cadenas de palabras o símbolos
+\end{itemize}
+}
+\end{block}
+
+\uncover<4>{\alert{Esta clase vamos a definir tipos de dato propios, que representen \textbf{conceptos} propios del dominio del problema que estamos atacando.}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Enunciado}
+
+Se desea guardar una lista de las personas que votaron en una determinada mesa. El programa a implementar debe tomar los datos de cada persona y guardarlos; y permitir ver la lista de personas ordenada por apellido.
+
+\uncover<2->{Los datos a guardar para cada persona son:
+\begin{enumerate}
+\item Nombre \uncover<3->{\texttt{[string]}}
+\item Apellido \uncover<3->{\texttt{[string]}}
+\item DNI \uncover<3->{\texttt{[int]}}
+\item Fecha de nacimiento \uncover<3->{\alert<4>{\texttt{[fecha]}}}
+\end{enumerate}
+}
+
+\uncover<4>{Vamos a asumir que contamos con un tipo de dato \texttt{fecha} que es la implementación del concepto de una fecha en la vida real.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Modelando}
+
+Lo primero a decidir es cómo vamos a guardar los datos. Podríamos guardar una lista para cada dato a guardar...
+
+\begin{pseudo}
+lista<string> nombres
+lista<string> apellidos
+lista<int> dnis
+lista<fecha> fechasNacimiento
+\end{pseudo}
+
+De manera que en el índice \texttt{k} de la lista, estén los datos de una persona. Veamos un ejemplo.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Ejemplo con muchas listas}
+
+Para guardar los datos de las siguientes personas:
+
+\begin{pseudo}
+John Lennon, 28.453.987, 9/10/1940
+Paul McCartney, 29.354.246, 18/6/1942
+George Harrison, 30.493.775, 25/2/1943
+\end{pseudo}
+
+Tendríamos las siguientes estructuras de datos:
+
+\begin{pseudo}
+nombres = [George, John, Paul]
+apellidos = [Harrison, Lennon, McCartney]
+dnis = [30.493.775, 28.453.987, 29.354.246]
+fechasNacimiento = [25/2/1943, 9/10/1940, 18/6/1942]
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Algo no está bien...}
+
+Lo que estamos haciendo es separando todos los datos de una persona entre distintas estructuras de datos, y cada vez que los queremos consultar tendríamos que volver a juntarlos.
+
+\uncover<2>{
+Lo que necesitamos es poder guardar todos los datos de una persona juntos en una única lista.
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Una primera solución}
+
+Vimos que en nuestro problema, una persona está formada por dos strings (nombre y apellido), un int (DNI) y una fecha (fecha de nacimiento).
+
+Podríamos guardar estos cuatro datos juntos como un único dato dentro de nuestra lista usando una \textbf{tupla}.
+
+\begin{block}<2->{Tupla}
+Una tupla es una secuencia ordenada de elementos de distintos tipos de dato, con una longitud fija.
+
+Por ejemplo...
+\begin{itemize}
+\item Una tupla de un entero y un string: \texttt{(2, 'Hola')}
+\item Una tupla de tres enteros: \texttt{(1,6,3)}
+\item \alert<3>{Una tupla de dos strings, un entero y una fecha: \texttt{('John', 'Lennon', 28.453.987, 9/10/1940)}}
+\end{itemize}
+
+\uncover<4>{Nos vamos a referir a cada elemento de la tupla con la misma notación que los arreglos.}
+
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Usando tuplas}
+
+De esta forma, nuestra estructura de datos para el problema pasa a ser la siguiente:
+
+\begin{pseudo}
+lista<tupla<string,string,int,fecha>> personas = [
+  ('George', 'Harrison', 30.493.775, 25/2/1943),
+  ('John', 'Lennon', 28.453.987, 9/10/1940),
+  ('Paul', 'McCartney', 29.354.246, 18/6/1942)
+]
+\end{pseudo}
+
+Esto hace que la implementación de nuestro programa sea más sencilla.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Agregando una persona}
+
+Especifiquemos e implementemos la función que agrega una nueva persona a nuestra estructura de datos.
+
+\begin{pseudo}[\small]
+Funcion agregarPersona
+Agrega una nueva persona a la lista ordenada por apellido
+\only<1>{Entrada: string \textit{nombre}, string \textit{apellido}, 
+         int \textit{dni}, fecha \textit{fechaNacimiento}
+Pre:  la lista existente de personas está ordenada
+Post: la lista de personas está ordenada
+      la lista de personas tiene a todas las anteriores más la nueva}\pseudohrule
+\only<2->{\textit{nuevaPersona} = (nombre, apellido, dni, fechaNacimiento)
+para cada \textit{posicion} de la lista \textit{personas}
+  \textit{persona} = personas[posicion]
+  si \alert<3>{persona[1]} > \textit{apellido}
+    insertar(\textit{nuevaPersona}, \textit{posicion}, \textit{personas})
+    \textit{agregada} = true
+    salir del ciclo
+  fin
+fin
+si no fue \textit{agregada}
+  agregar \textit{nuevaPersona} al final de \textit{personas}
+fin}
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Mostrando la lista}
+
+La función que muestra la lista de personas al usuario resulta casi trivial:
+
+\begin{pseudo}[\small]
+Procedimiento mostrarPersonas
+Muestra al usuario la lista de personas ordenada por apellido
+Pre:  la lista \textit{personas} está ordenada por apellido
+Post: -
+\pseudohrule
+para cada \textit{tuplaPersona} en \textit{personas}
+  mostrar 'Nombre: ' + tuplaPersona[0]
+  mostrar 'Apellido: ' + tuplaPersona[1]
+  mostrar 'DNI: ' + tuplaPersona[2]
+  mostrar 'Fecha Nacimiento: ' + tuplaPersona[3]
+fin
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Inconvenientes}
+
+Pudimos resolver el ejercicio modelando una persona como una tupla de strings, entero y fecha.
+
+\vskip 10pt
+
+\uncover<2->{Pero eso tiene algunos inconvenientes, como tener que acordarse qué posición de la tupla corresponde a cada campo:
+\begin{center}
+
+\textit{¿El nombre era tupla[0] o era tupla[1]?}
+\end{center}}
+
+\uncover<3->{Sería más declarativo poder decir simplemente \texttt{persona.nombre} o \texttt{persona.apellido} cada vez que uno quiere referirse a ese \textit{atributo} de esa persona...}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Segunda solución}
+
+Como dijimos la principio de la clase, vamos a crear nuestros propios \textbf{tipos de dato} que sean las \textit{implementaciones de los conceptos} del dominio de nuestro problema.
+
+\vskip 10pt
+
+En este caso vamos a crear la \textbf{clase Persona} que tenga los atributos indicados:
+
+\begin{pseudo}
+clase Persona
+  string nombre
+  string apellido
+  int dni
+  fecha fechaNacimiento
+fin
+\end{pseudo}
+
+Con lo que la estructura de datos \textit{personas} pasa a ser simplemente una \texttt{lista<Persona>}.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Agregando una persona (y no a una tupla!)}
+
+Reimplementemos nuestra función \texttt{agregarPersona} ahora que tenemos la clase Persona:
+
+\begin{pseudo}[\small]
+Funcion agregarPersona
+Agrega una nueva persona a la lista ordenada por apellido
+\pseudohrule
+\textit{nuevaPersona} = \alt<1>{(nombre, apellido, dni, fechaNacimiento)}{\alert<2>{nueva Persona(nombre, apellido, dni, fechaNacimiento)}}
+para cada \textit{posicion} de la lista \textit{personas}
+  \textit{persona} = personas[posicion]
+  si \alt<1>{persona[1]}{\alert<2>{persona.apellido}} > \textit{apellido}
+    insertar(\textit{nuevaPersona}, \textit{posicion}, \textit{personas})
+    \textit{agregada} = true
+    salir del ciclo
+  fin
+fin
+si no fue \textit{agregada}
+  agregar \textit{nuevaPersona} al final de \textit{personas}
+fin
+\end{pseudo}
+
+\uncover<2>{}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Mostrando la lista de personas}
+
+Y el procedimiento que muestra la lista de personas es mucho más clara:
+
+\begin{pseudo}[\small]
+Procedimiento mostrarPersonas
+Muestra al usuario la lista de personas ordenada por apellido
+\pseudohrule
+para cada \textit{persona} en \textit{personas}
+  mostrar 'Nombre: ' + \alert<2>{persona.nombre}
+  mostrar 'Apellido: ' + \alert<2>{persona.apellido}
+  mostrar 'DNI: ' + \alert<2>{persona.dni}
+  mostrar 'Fecha Nacimiento: ' + \alert<2>{persona.fechaNacimiento}
+fin
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Simplificando aún más}
+
+Podríamos definir nosotros cómo queremos que se muestre en general una instancia de la clase Persona, más allá de la función \texttt{mostrarPersonas}. 
+
+Podemos definirlo dentro de la misma clase Persona.
+
+\begin{pseudo}
+clase Persona
+  string nombre
+  string apellido
+  int dni
+  fecha fechaNacimiento
+  
+  \alert<2>{funcion representar()
+    \textit{Devuelve un string con la representacion de la persona}
+    return 'Nombre: ' + nombre + ', Apellido: ' + apellido, 
+      ', DNI: ' + dni + ', Nacimiento: ' + fechaNacimiento
+  fin}
+  
+fin
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Mostrando la lista de personas}
+
+Y el procedimiento de listar personas simplemente resulta:
+
+\begin{pseudo}[\small]
+Procedimiento mostrarPersonas
+Muestra al usuario la lista de personas ordenada por apellido
+\pseudohrule
+para cada \textit{persona} en \textit{personas}
+  mostrar \alert<2>{persona.representar()}
+fin
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resumiendo}
+
+\begin{itemize}
+\addtolength{\itemsep}{0.5\baselineskip}
+\item Vimos las tuplas como un nuevo tipo de dato, que es una agrupación de otros tipos de dato
+\item Los tipos de dato son implementaciones de conceptos de la vida real 
+\item Podemos implementar nuestros propios tipos de dato para modelar los conceptos del problema que estamos intentando resolver 
+\end{itemize}
+
+\end{frame}
+
+
+\end{document}
+
+
+

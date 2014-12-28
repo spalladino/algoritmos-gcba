@@ -1,0 +1,332 @@
+\usepackage[spanish]{babel}
+\usepackage[ansinew]{inputenc}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+
+\title{Introducción a los Algoritmos}
+\author{Algoritmos y Estructuras de Datos \\
+Programación Estructurada}
+\date{}
+
+\newcommand{\pseudohrule}{\vskip 5pt \hrule}
+
+\newenvironment{pseudo}{
+\begin{figure}
+\begin{semiverbatim}
+}{
+\end{semiverbatim}
+\end{figure}
+}
+\setlength{\parskip}{3pt plus 1pt minus 1pt}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Definiciones}
+
+\begin{block}{Qué es un programa?}
+Un \textbf{programa} es una lista bien definida y ordenada de instrucciones que permite hallar la solución a un problema.
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Ejemplo de Programa}
+Si nuestro \textbf{problema} es armar una mesa de ping-pong, un \textbf{programa} para resolverlo puede ser el siguiente...
+
+\begin{pseudo}
+Armar una mesa de ping-pong
+\pseudohrule
+1. Pintar el tablón de color verde
+2. Esperar a que seque la pintura
+3. Si la pintura no quedó uniforme, volver al paso 1
+4. Para cada una de las cuatro patas: clavar la pata a la mesa
+5. Colocar la red
+\end{pseudo}
+
+\uncover<2->{Cada uno de los pasos es una \textbf{instrucción} del programa}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Definiciones}
+
+\begin{block}{Qué es un programa?}
+Un \textbf{programa} es una lista bien definida y ordenada de \textbf{instrucciones} que permite hallar la solución a un problema.
+\end{block}
+
+\begin{block}{Qué es una instrucción?}
+Una \textbf{instrucción} es una operación que o bien produce una transformación sobre los elementos del programa, o produce una modificación en el flujo de control en la ejecución del programa.
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Instrucciones en nuestro programa}
+Volviendo a nuestro programa de mesa de ping-pong...
+
+\begin{pseudo}
+Armar una mesa de ping-pong
+\pseudohrule
+\alert<2>{1. Pintar el tablón de color verde}
+\alert<3>{2. Esperar a que seque la pintura}
+\alert<4>{3. Si la pintura no quedó uniforme, volver al paso 1}
+4. Para cada una de las cuatro patas: clavar la pata a la mesa
+5. Colocar la red
+\end{pseudo}
+\uncover<2->{\alert<2>{$(1)$ modifica la mesa pintándola de verde}}
+
+\uncover<3->{\alert<3>{$(2)$ modifica la ejecución obligándonos a esperar}}
+
+\uncover<4->{\alert<4>{$(3)$ modifica la ejecución enviándonos de vuelta al primer paso}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Definiciones}
+
+\begin{block}{Qué es un programa?}
+Un \textbf{programa} es una lista bien definida y ordenada de \textbf{instrucciones} que permite hallar la solución a un problema.
+\end{block}
+
+\begin{block}{Qué es una instrucción?}
+Una \textbf{instrucción} es una operación que o bien produce una transformación sobre los elementos del programa, o produce una modificación en el flujo de control en la ejecución del programa.
+\end{block}
+
+\begin{block}{Qué es un algoritmo?}
+Un \textbf{algoritmo} es una lista bien definida, ordenada y \alert<2->{finita} de instrucciones que permite hallar la solución a un problema.
+\end{block}
+
+\uncover<2->{\alert{Notar que un algoritmo requiere que la cantidad de instrucciones a ejecutar sea siempre finita; es decir, un algoritmo siempre termina.}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Terminación en nuestro programa}
+Veamos si este programa termina:
+
+\begin{pseudo}
+Armar una mesa de ping-pong
+\pseudohrule
+\alert<2,5,8>{1. Pintar el tablón de color verde}
+\alert<3,6>{2. Esperar a que seque la pintura}
+\alert<4,7>{3. Si la pintura no quedó uniforme, volver al paso 1}
+4. Para cada una de las cuatro patas: clavar la pata a la mesa
+5. Colocar la red
+\end{pseudo}
+
+\uncover<8->{Para que este programa termine necesitamos saber que la pintura en algún momento va a quedar uniforme.}
+
+\uncover<9>{Podemos preguntarnos de dónde sale la pintura, el tablón, las patas y la red; es decir, los materiales que necesitamos para construir la mesa.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Entrada del programa}
+\begin{block}{Datos de entrada}
+Los programas no aplican sobre la nada, lo hacen sobre un conjunto de datos de entrada que son la base sobre la cual deseamos operar.
+\end{block}
+\uncover<2->{En nuestro caso, los datos de entrada serían la pintura, la red, el tablón y las cuatro patas.}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Entrada de nuestro programa}
+Modificamos la definición del programa para que indique cuál es la entrada:
+
+\begin{pseudo}
+Armar una mesa de ping-pong
+Entrada: \alert<2>{pintura verde}, tablón, cuatro patas, red
+\pseudohrule
+1. Pintar el tablón de color verde
+2. Esperar a que seque la pintura
+\alert<2>{3. Si la pintura no quedó uniforme, volver al paso 1}
+4. Para cada una de las cuatro patas: clavar la pata a la mesa
+5. Colocar la red
+\end{pseudo}
+
+\uncover<2->{Buscamos entonces que la pintura que recibimos como entrada quede uniforme después de cierta cantidad de manos.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Especificación}
+\begin{block}{Precondición}
+La precondición de nuestro programa indica qué cosas deben cumplirse al iniciar la ejecución del mismo para que se ejecute correctamente. También se la llama \textit{requiere}.
+\end{block}
+
+\uncover<2->{En nuestro ejemplo, agregamos como precondición del programa que la pintura quede uniforme en a lo sumo 2 manos.}
+
+\uncover<3->{De esta manera podemos asegurar que nuestro programa termina, y por lo tanto, es un \textbf{algoritmo}.}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Precondición de nuestro programa}
+Agregamos la precondición sobre la pintura:
+
+\begin{pseudo}
+Armar una mesa de ping-pong
+Entrada: pintura verde, tablón, cuatro patas, red
+Pre: \alert<8>{la pintura queda uniforme en a lo sumo 2 manos}
+\pseudohrule
+\alert<2,5>{1. Pintar el tablón de color verde}
+\alert<3,6>{2. Esperar a que seque la pintura}
+\alert<4,7,8>{3. Si la pintura no quedó uniforme, volver al paso 1}
+\alert<9>{4. Para cada una de las cuatro patas: clavar la pata a la mesa}
+\alert<10>{5. Colocar la red}
+\end{pseudo}
+
+\uncover<11>{Ahora sí, podemos afirmar que nuestro programa para construir una mesa de ping-pong es un \textbf{algoritmo}.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Correctitud}
+Ahora que sabemos que nuestro algoritmo termina, nos interesa saber si produce el resultado correcto.
+
+En nuestro programa, esto implica ver si la mesa de ping pong tiene el color correcto (verde), tiene una red, y posee las medidas reglamentarias ($2.7m \times 1.5m$).
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Especificación}
+
+\begin{block}{Precondición}
+La precondición de nuestro programa indica qué cosas deben cumplirse al iniciar la ejecución del mismo para que se ejecute correctamente. También se la llama \textit{requiere}.
+\end{block}
+
+\begin{block}{Postcondición}
+La postcondición de nuestro programa indica qué cosas se cumplen al finalizar la ejecución del mismo, suponiendo que se cumplía la precondición al inicio. También se la llama \textit{asegura}.
+\end{block}
+
+\begin{block}<2->{Correctitud}
+Un programa entonces es \textbf{correcto} cuando dados los datos de entrada tal que se cumple con la precondición podemos asegurar que el programa termina y la postcondición se cumple.
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Postcondición de nuestro programa}
+Agregamos la postcondición a la especificación de nuestro programa:
+
+\begin{pseudo}
+Armar una mesa de ping-pong
+Entrada: pintura verde, tablón, cuatro patas, red
+Pre: la pintura queda uniforme en a lo sumo 2 manos
+Post: \alert<3-4>{la mesa es verde}, \alert<5-6>{tiene una red}, \alert<7-8>{mide 2.7m * 1.5m}
+\pseudohrule
+\alert<4>{1. Pintar el tablón de color verde}
+2. Esperar a que seque la pintura
+3. Si la pintura no quedó uniforme, volver al paso 1
+4. Para cada una de las cuatro patas: clavar la pata a la mesa
+\alert<6>{5. Colocar la red}
+\end{pseudo}
+
+\uncover<2->{Verifiquemos que nuestro algoritmo \textbf{asegura} que se cumple la postcondición al ejecutarlo.}
+
+\alert<8>{\uncover<8>{Nos quedó una condición que no podemos asegurar!}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Correctitud}
+
+Nuestro algoritmo no cumple la postcondición, por lo tanto no es correcto. 
+
+\uncover<2->{Tenemos que buscar una forma de corregirlo. Si no encontramos cómo hacerlo modificando las instrucciones que lo componen, puede que sea necesario pedir nuevas condiciones sobre los datos de entrada.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Modificando la precondición de nuestro algoritmo}
+Podemos reforzar la precondición de nuestro algoritmo pidiendo que el tablón tenga las medidas necesarias:
+
+\begin{pseudo}
+Armar una mesa de ping-pong
+Entrada: pintura verde, tablón, cuatro patas, red
+Pre: la pintura queda uniforme en a lo sumo 2 manos, 
+     \alert<3>{el tablón mide 2.7m * 1.5m}
+Post: la mesa es verde, tiene una red, \alert<2-3>{mide 2.7m * 1.5m}
+\pseudohrule
+1. Pintar el tablón de color verde
+2. Esperar a que seque la pintura
+3. Si la pintura no quedó uniforme, volver al paso 1
+4. Para cada una de las cuatro patas: clavar la pata a la mesa
+5. Colocar la red
+\end{pseudo}
+
+\uncover<4>{La postcondición ahora se cumple, con lo que nuestro algoritmo es correcto!}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Especificación}
+Especificar un algoritmo implica describir qué es lo que hace a partir de detallar cuál es el estado posterior a su ejecución en función del estado anterior a la misma.
+
+Especificar nos permite tener en claro cuál debe ser el funcionamiento del algoritmo y estar atentos a fallas en su funcionamiento.
+
+\uncover<2>{La especificación también nos sirve como un contrato del algoritmo, de manera de poder comunicar qué es lo que hace. Veamos en nuestro ejemplo...}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tercerizando}
+Supongamos ahora que tenemos los materiales, pero vamos a encargarle a otra persona que arme la mesa.
+
+Nos basta con encontrar a alguien que, \textbf{requiriendo} que los materiales que le damos sean válidos, nos \textbf{asegure} que la mesa va a cumplir las condiciones que necesitamos (color, tamaño, etc).
+
+\uncover<2->{Cualquier algoritmo que cumpla dicha \textbf{especificación} es útil.}
+
+\begin{pseudo}
+\uncover<2->{Armar una mesa de ping-pong
+Entrada: pintura verde, tablón, cuatro patas, red
+Pre: la pintura queda uniforme en a lo sumo 2 manos, 
+     el tablón mide 2.7m * 1.5m
+Post: la mesa es verde, tiene una red, mide 2.7m * 1.5m}
+\end{pseudo}
+
+\uncover<3->{Notar que la especificación describe el \textbf{qué}, pero no el \textbf{cómo}.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resumiendo...}
+
+\begin{itemize}
+\item Programa como un conjunto de instrucciones
+\item Diferencia con algoritmo
+\item Datos de entrada
+\item Precondición y postcondición
+\item Uso de la especificación
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
+
+

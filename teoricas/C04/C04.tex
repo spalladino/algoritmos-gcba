@@ -1,0 +1,340 @@
+
+\usepackage[spanish]{babel}
+\usepackage[ansinew]{inputenc}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+
+\title{Arreglos}
+\author{Algoritmos y Estructuras de Datos \\
+Programación Estructurada}
+\date{}
+
+\newcommand{\pseudohrule}{\vskip 5pt \hrule}
+
+\newenvironment{pseudo}{
+\begin{figure}
+\begin{semiverbatim}
+}{
+\end{semiverbatim}
+\end{figure}
+}
+
+\setlength{\parskip}{3pt plus 1pt minus 1pt}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Repaso}
+
+\uncover<1->{
+\begin{block}{Estados}
+Denominamos estado a un punto en la ejecución de un programa; en cada estado guardamos el valor de las variables y cuál será la próxima instrucción a ejecutarse. Un estado es una \textit{foto} en la ejecución de un programa.
+\end{block}
+}
+
+\uncover<2->{
+\begin{block}{Estructuras de control}
+Las estructuras de control nos permiten modificar el flujo de instrucciones de un programa. Ejemplos son el condicional y los ciclos.
+\end{block}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+
+\uncover<1->{
+\begin{block}{Especificación}
+La especificación de un algoritmo es un contrato entre el programador y el usuario en donde se definen 
+cuales son los datos de entrada, la precondición y la postcondición del mismo.
+\end{block}
+}
+
+\uncover<2->{
+\begin{block}{Invariante de ciclo}
+El invariante de un ciclo es una propiedad que se mantiene en cada iteración del ciclo, y nos ayuda a probar la correctitud del programa que estamos escribiendo.
+\end{block}
+}
+
+\uncover<3->{
+\begin{block}{Correctitud}
+Un algoritmo es correcto cuando siempre que vale la precondición podemos asegurar que el programa termina y la postcondición se cumple.
+\end{block}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Dar un algoritmo para...}
+
+Dadas las notas de un examen en un curso de 4 alumnos, hallar el promedio de notas del curso.
+
+\begin{pseudo}
+Devuelve el promedio de notas del curso
+Entrada: enteros n1,n2,n3,n4
+Pre:  las notas deben ser positivas
+Post: el resultado es el promedio de las notas
+\pseudohrule
+sum = n1+n2+n3+n4
+devolver sum/4
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Agrandando el curso}
+
+Qué pasa si el curso ahora tiene 8 alumnos en lugar de 4?
+
+\begin{pseudo}
+Devuelve el promedio de notas del curso
+Entrada: enteros n1,n2,n3,n4,n5,n6,n7,n8
+Pre:  las notas deben ser positivas
+Post: el resultado es el promedio de las notas
+\pseudohrule
+sum = n1+n2+n3+n4+n5+n6+n7+n8
+devolver sum/8
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Agrandando el curso...}
+Qué pasa si el curso tiene 20 alumnos? Tenemos que mantener 20 variables como entrada al algoritmo. Y si tiene 100 alumnos?
+
+Se hace impracticable manejar esa cantidad de variables, necesitamos una \textbf{estructura} que pueda contener los valores de muchas variables fácilmente. 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Arreglos}
+
+Un \textbf{arreglo} o \textbf{array} es una estructura que contiene una serie de elementos. Un arreglo tiene una longitud determinada, que indica cuántos elementos contiene.
+
+\begin{center}
+\includegraphics[scale=0.5]{C04/vector.png}
+\end{center}
+
+\begin{block}{Memoria}<2->
+En memoria un array de $n$ elementos equivale a reservar celdas contiguas de memoria para almacenar $n$ elementos.
+\end{block}
+
+\begin{block}{Operaciones}<3->
+Vamos a definir algunas operaciones fundamentales que podemos hacer con un arreglo: construirlo, obtener su longitud, obtener el i-ésimo elemento y guardar el i-ésimo elemento.
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Operaciones sobre arreglos}
+
+\begin{block}{Constructor}
+Al construir un arreglo, indicaremos la longitud que tendrá el mismo para reservar la cantidad necesaria de celdas en memoria, así como el tipo de datos que albergará. Por ejemplo, un arreglo de 10 enteros se puede crear de la siguiente forma:
+
+\begin{pseudo}
+arreglo = int[10]
+\end{pseudo}
+
+Podemos también inicializar un arreglo indicando cuáles son sus elementos:
+
+\begin{pseudo}
+arreglo = [13,6,4,7,3,7,2,65,1,2]
+\end{pseudo}
+
+\end{block}
+
+\uncover<2>{Esta segunda forma es la que utilizaremos en Python}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Operaciones sobre arreglos}
+
+\begin{block}{Longitud}
+Dado un arreglo, podemos obtener cuál es su longitud, es decir, cual es la máxima cantidad de elementos que contiene. El siguiente ejemplo imprime un $10$ por pantalla.
+
+\begin{pseudo}
+arreglo = int[10]
+imprimir longitud(arreglo)
+\end{pseudo}
+
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Operaciones sobre arreglos}
+
+\begin{block}{Asignación}
+Podemos asignar el valor que querramos a una determinada posición del arreglo, siempre y cuando esta posición exista. \alert<2>{Los índices en un arreglo se numeran de $0$ a longitud$-1$}.
+
+\begin{pseudo}
+arreglo = int[10]
+arreglo[5] = 20
+\alert{\only<3>{arreglo[10] = 40}}
+\end{pseudo}
+
+\uncover<2->{
+\only<2>{Este ejemplo asigna el valor 20 a la sexta posición del arreglo.}
+\only<3>{Al intentar asignar a un índice fuera del arreglo, el programa arroja un error, pues estamos \alert{accediendo a una posición no válida} del arreglo}
+}
+
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Operaciones sobre arreglos}
+
+\begin{block}{Obtener valor de una posición}
+Así como asignamos un valor a una posición del arreglo, podemos luego obtenerlo:
+
+\begin{pseudo}
+arreglo = int[10]
+arreglo[5] = 10
+\only<1>{imprimir arreglo[5]}\alert{\only<2>{imprimir arreglo[6]}}
+\end{pseudo}
+
+\uncover<2>{
+\only<1>{Este ejemplo imprime 10 por pantalla}
+\only<2>{En este caso lo que se imprime es indefinido, pues nunca inicializamos la posición $6$ del arreglo con algún valor.}
+}
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Iterando sobre un arreglo}
+
+En general vamos a querer iterar sobre un arreglo, para ejecutar alguna acción sobre cada uno de los elementos.
+
+Para esto vamos a usar un ciclo:
+\begin{itemize}
+\item La variable de iteración se corresponde con el índice del arreglo
+\item La variable itera sobre los índices válidos: de cero a longitud-1
+\item El elemento en cada iteración se obtiene indexando el arreglo con la variable de iteración
+\end{itemize}
+
+\begin{pseudo}
+para i de 0 a longitud(arreglo)-1
+  elemento = arreglo[i]
+  \only<1>{// hacer algo con elemento}\only<2>{\alert{imprimir elemento}}
+fin
+\end{pseudo}
+
+\uncover<2->{
+\alert{Si queremos imprimir todos los elementos del arreglo}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Volviendo al ejemplo}
+Queremos calcular el promedio de notas de un curso de una \textbf{cantidad arbitraria} de alumnos; usamos un vector como entrada del programa.
+
+\begin{pseudo}
+Devuelve el promedio de notas del curso
+Entrada: arreglo de enteros notas
+Pre:  las notas deben ser positivas, 
+      el arreglo no debe ser vacio
+Post: el resultado es el promedio de las notas
+\pseudohrule
+sum = 0
+para i de 0 a longitud(notas)-1
+  sum = sum + notas[i]
+fin
+devolver sum/longitud(notas)
+\end{pseudo}
+
+\begin{block}{Cuál es el invariante del ciclo en este programa?}<2->
+\uncover<3>{Al terminar la iteración $k$ se tiene la suma de las primeras $k$ notas del curso en la variable $sum$.}
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Iterando sobre un arreglo 2.0}
+
+Muchas veces queremos iterar sobre todos los elementos del arreglo, independientemente del índice del elemento.
+
+Definimos el $para cada$ como estructura de control para iterar sobre los elementos de un arreglo en orden.
+
+\begin{pseudo}
+arreglo = [1,2,3,4,5]
+para cada elemento en arreglo
+  imprimir elemento
+end
+\end{pseudo}
+
+Es equivalente a hacer:
+
+\begin{pseudo}
+arreglo = [1,2,3,4,5]
+para i de 0 a longitud(arreglo)-1
+  elemento = arreglo[i]
+  imprimir elemento
+fin
+\end{pseudo}
+
+\uncover<2>{En Python, se utiliza el mismo \textbf{for} para iterar sobre un arreglo; otros lenguajes definen un operador \textbf{for each}.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Reescribiendo el ejemplo}
+Usamos la nueva estructura de control para iterar sobre las notas del curso
+
+\begin{pseudo}
+Devuelve el promedio de notas del curso
+Entrada: arreglo de enteros notas
+Pre:  las notas deben ser positivas, 
+      el arreglo no debe ser vacio
+Post: el resultado es el promedio de las notas
+\pseudohrule
+sum = 0
+para cada nota en notas
+  sum = sum + nota
+fin
+devolver sum/longitud(notas)
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resumiendo...}
+
+\begin{itemize}
+\item Arreglos
+\item Operaciones básicas
+\item Iterar elementos
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
+

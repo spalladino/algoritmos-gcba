@@ -1,0 +1,442 @@
+
+\usepackage[spanish]{babel}
+\usepackage[ansinew]{inputenc}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+
+
+\title{Algoritmos de Búsqueda}
+\author{Algoritmos y Estructuras de Datos \\
+Programación Estructurada}
+\date{}
+
+\newcommand{\pseudohrule}{\vskip 5pt \hrule}
+
+\newenvironment{pseudo}[1][\normalsize]{
+\begin{figure}
+#1
+\begin{semiverbatim}
+}{
+\end{semiverbatim}
+\normalsize
+\end{figure}
+}
+
+\setlength{\parskip}{3pt plus 1pt minus 1pt}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Repaso}
+
+\begin{block}<1->{Algoritmo}
+Un algoritmo es una lista de finita intrucciones que permiten hallar la solución a un problema.
+\end{block}
+
+\begin{block}<2->{Especificación}
+La especificación de un algoritmo es un contrato entre el programador y el usuario en donde se definen 
+cuales son los datos de entrada, la precondición y la postcondición del mismo.
+\end{block}
+
+\begin{block}<3->{Correctitud}
+Un algoritmo es correcto cuando siempre que vale la precondición podemos asegurar que el programa termina y la postcondición se cumple.
+\end{block}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Enunciado}
+
+Dar una algoritmo que resuelva la función \texttt{buscar} especificada de la siguiente manera:
+
+\begin{pseudo}
+Funcion buscar
+Devuelve la posición de un elemento en un arreglo, 
+o -1 si no está
+\pseudohrule
+Entrada: \textit{elemento}, \textit{arreglo}
+Salida:  entero \textit{i}
+Pre:  -
+Post: \textit{arreglo[i] == elemento} si el elemento está en el arreglo,
+      o \textit{i == -1} si el elemento no está en el arreglo
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Ejemplos}
+
+Dado el arreglo \texttt{['A','B','C','D','E']}, la función debería devolver:
+
+\begin{pseudo}
+buscar('A', ['A','B','C','D','E'])
+> 0
+
+buscar('D', ['A','B','C','D','E'])
+> 3
+
+buscar('F', ['A','B','C','D','E'])
+> -1
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Algoritmo}
+
+El algoritmo es sencillo: vamos recorriendo el arreglo, y devolvemos la posición del arreglo cuando encontramos el elemento. Si recorrimos todo el arreglo y no encontramos el elemento, devolvemos -1.
+
+\begin{pseudo}
+Funcion buscar(elemento, arreglo)
+\pseudohrule
+para cada indice \textit{i} del arreglo
+  si arreglo[i] == elemento
+    devolver i
+  fin
+fin 
+devolver -1
+\end{pseudo}
+
+\uncover<2>{A este algoritmo se lo llama \alert{búsqueda secuencial} o \alert{búsqueda lineal}.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Arreglo ordenado}
+
+Supongamos ahora que la funcion a implementar es \texttt{buscarOrdenado}, igual a la anterior pero que toma un arreglo ordenado como entrada:
+
+\begin{pseudo}
+Funcion buscarOrdenado
+Devuelve la posición de un elemento en un arreglo, 
+o -1 si no está
+\pseudohrule
+Entrada: \textit{elemento}, \textit{arreglo}
+Salida:  entero \textit{i}
+Pre:  \alert{los elementos de \textit{arreglo} están ordenados}
+Post: \textit{arreglo[i] == elemento} si el elemento está en el arreglo,
+      o \textit{i == -1} si el elemento no está en el arreglo
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Optimizando}
+
+Pensemos en como podríamos mejorar el algoritmo: si estamos buscando un elemento en el arreglo, y el elemento actual es mayor al que estamos buscando, ya sabemos que no vamos a encontrar el buscado.
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.35]{C11/LinearSearch.png}
+\end{figure}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Algoritmo mejorado}
+
+Podemos mejorar el algoritmo ahora para los casos en los que el arreglo está ordenado, devolviendo la respuesta más rápidamente si el elemento no se encuentra en el arreglo.
+
+\begin{pseudo}
+Funcion buscarOrdenado(elemento, arreglo)
+\pseudohrule
+para cada indice \textit{i} del arreglo
+  si arreglo[i] == elemento
+    devolver i
+  \alert{si arreglo[i] > elemento
+    devolver -1}
+  fin
+fin 
+devolver -1
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Mayor y menor}
+
+Juguemos a un juego: voy a pensar un número entre 1 y 100, y ustedes tienen que adivinarlo en la menor cantidad de preguntas posibles. Ante cada adivinanza, les voy a contestar si acertaron, y si no, si es mayor o menor.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Estrategia}
+
+Cuál es la mejor estrategia para jugar a este juego? Si nosotros intentamos un número, por ejemplo $15$, y no acertamos, vamos a saber luego si el número está entre 1 y 14 o entre 16 y 100.
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.3]{C11/BinarySearch1.png}
+\end{figure}
+\end{center}
+
+En la siguiente jugada, ya tenemos un intervalo más chico sobre el cual intentar adivinar.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Estrategia ganadora}
+
+La mejor estrategia es aquella que siempre genera dos subintervalos iguales, es decir, pregunta por el número \textit{en la mitad} del intervalo.
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.25]{C11/BinarySearch2.png}
+\end{figure}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Cantidad de preguntas}
+
+Cuál es la cantidad máxima de preguntas que realizaríamos de seguir esta estrategia, si sabemos que a cada paso se achica el intervalo sobre el cual tenemos que adivinar? 
+
+A lo sumo vamos a preguntar tantas veces como haga falta hasta llegar a un intervalo de un solo elemento. Si en cada paso el intervalo se reduce a aproximadamente la mitad:
+
+\begin{center}
+\begin{tabular}{c|c}
+Preguntas & Tamaño del intervalo \\
+\hline
+0 & 100 \\
+1 & 50 \\
+2 & 25 \\
+3 & 12 \\
+4 & 6 \\
+5 & 3 \\
+6 & \textbf{1}
+\end{tabular}
+\end{center}
+
+\uncover<2>{Esto es aproximadamente el $log_2(n)$, donde $n$ es la cantidad de elementos inicial del intervalo.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Búsqueda binaria}
+
+Este concepto puede aplicarse a la búsqueda en un arreglo ordenado, comparando a cada paso el elemento actual con el buscado para saber en qué subintervalo se debe seguir buscando.
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.25]{C11/BinarySearch3.png}
+\end{figure}
+\end{center}
+
+\uncover<2>{Este algoritmo se llama \alert{búsqueda binaria}.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Comparación con búsqueda lineal}
+
+En un arreglo de 100 elementos, habíamos concluido que necesitamos a lo sumo $6$ \textit{iteraciones} del algoritmo para encontrar el elemento buscado usando búsqueda binaria.
+
+Si usásemos búsqueda lineal, cuál es la máxima cantidad de iteraciones que necesitaríamos para encontrar un elemento? 
+
+\uncover<2>{Si el elemento está al final del arreglo, necesitaríamos $100$ iteraciones del algoritmo, esto es, recorrer todo el arreglo hasta llegar al elemento buscado.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Comparación con búsqueda lineal}
+
+Y si tuviéramos arreglos de más de $100$ elementos? Cuál es la cantidad de operaciones que tendríamos que hacer en \textit{peor caso}?
+
+\begin{center}
+\begin{tabular}{r||r|r}
+Tamaño del intervalo & Búsqueda lineal & Búsqueda binaria \\
+\hline
+100 &	100 &	6 \\
+1,000 &	1,000 &	9 \\
+10,000 &	10,000 &	13 \\
+100,000 &	100,000 &	16 \\
+1,000,000 &	1,000,000 &	19 \\
+10,000,000 &	10,000,000 &	23 \\
+100,000,000 &	100,000,000 &	26 \\  
+1,000,000,000 &	1,000,000,000 &	29 \\
+\end{tabular}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Comparando algoritmos}
+
+Medir la \textit{cantidad aproximada de operaciones en peor caso en función de la entrada} es solamente una manera de comparar dos algoritmos.
+
+\begin{itemize}
+\item Podemos comparar también la cantidad promedio de operaciones,
+\item la cantidad de operaciones en el mejor caso,
+\item la cantidad de espacio que requiere en memoria,
+\item etc...
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Implementando}
+
+Ahora sí: vamos a escribir el pseudocódigo algoritmo de búsqueda binaria!
+
+\begin{pseudo}[\small]
+Funcion busquedaBinaria(buscado, arreglo, desde, hasta)
+\pseudohrule
+si desde >= hasta
+  si arreglo[desde] == buscado devolver desde
+  si no devolver -1
+si no
+  medio = (desde + hasta) / 2
+  si arreglo[medio] > buscado
+    devolver busquedaBinaria(buscado, arreglo, desde, medio-1)
+  si arreglo[medio] < buscado
+    devolver busquedaBinaria(buscado, arreglo, medio+1, hasta)
+  si no
+    devolver medio
+fin
+\end{pseudo}
+
+Y podemos implementar \texttt{buscarOrdenado(buscado, arreglo)} como \texttt{busquedaBinaria(buscado, arreglo, 0, arreglo.length-1)}.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Recursión}
+
+Observemos que la función anterior se invoca a sí misma en algunos casos. A estas funciones las llamamos \textbf{recursivas}.
+
+\vskip 10pt
+
+Las funciones recursivas tienen al menos un \textbf{caso recursivo} en el que se invocan a sí mismas con determinados parámetros, y un \textbf{caso base} en el cual no hay llamada recursiva, caso en el cual terminan.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Recursión en búsqueda binaria}
+
+Identifiquemos el \alert<2>{caso base} y los \alert<3>{casos recursivos} en nuestro algoritmo.
+
+\begin{pseudo}[\small]
+Funcion busquedaBinaria(buscado, arreglo, desde, hasta)
+\pseudohrule
+si desde >= hasta
+  si arreglo[desde] == buscado \alert<2>{devolver desde}
+  si no \alert<2>{devolver -1}
+si no
+  medio = (desde + hasta) / 2
+  si arreglo[medio] > buscado
+    \alert<3>{devolver busquedaBinaria(buscado, arreglo, desde, medio-1)}
+  si arreglo[medio] < buscado
+    \alert<3>{devolver busquedaBinaria(buscado, arreglo, medio+1, hasta)}
+  si no
+    devolver medio
+fin
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Terminación}
+
+Observemos que nuestro algoritmo termina cuando encuentra el elemento o bien cuando \texttt{desde >= hasta}. Por qué elegimos esta condición?
+
+\vskip 10pt
+
+Si el elemento no está en el arreglo, las llamadas recursivas van a achicar cada vez más el intervalo hasta llegar a un solo o ningún elemento, en cuyo caso podemos devolver $-1$. Veamos un ejemplo:
+
+\begin{pseudo}[\small]
+arreglo = [A, C, E, G, J]
+busquedaBinaria(H, arreglo, 0, arreglo.length-1)
+\end{pseudo}
+
+\begin{tabular}{c|rrr}
+Iteración & \texttt{desde} & \texttt{hasta} & \texttt{medio} \\
+\hline
+1 & 0 [A] & 4 [J] & (0+4)/2 = 2 [E] \\
+2 & 2+1 = 3 [G] & 4 [J] & (3+4)/2 = 3 [G] \\ 
+3 & 3+1 = 4 [J] & 4 [J] & \textbf{fin}
+\end{tabular}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Versión iterativa}
+
+También podemos escribir este algoritmo de manera \textbf{iterativa}, es decir, usando un ciclo en lugar de una llamada recursiva:
+
+\begin{pseudo}[\small]
+Funcion busquedaBinaria(buscado, arreglo)
+\pseudohrule
+desde = 0, hasta = arreglo.length-1
+mientras desde < hasta
+  medio = (desde + hasta) / 2
+  si arreglo[medio] > buscado
+    \alert<2>{hasta = medio-1}
+  si arreglo[medio] < buscado
+    \alert<2>{desde = medio+1}
+  si no
+    devolver medio
+fin
+
+si arreglo[desde] == buscado entonces \alert<3>{devolver desde}
+si no \alert<3>{devolver -1}
+
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Implementaciones recursivas vs iterativas}
+
+Las funciones recursivas suelen ser más intuitivas y fáciles de comprender que las iterativas, pero también más difíciles de debuggear.
+\vskip 10pt
+\uncover<2->{Las iterativas, para casos de muchas iteraciones, suelen ser más rápidas que su contraparte recursiva.}
+\vskip 10pt
+\uncover<3->{Pero hay algunas funciones que sólo se pueden escribir de manera recursiva, y no tienen una contraparte iterativa.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resumiendo}
+
+\begin{itemize}
+\item Vimos dos algoritmos de búsqueda: \textbf{lineal} y \textbf{binaria}; este último sólo sirve para arreglos ordenados.
+\item Usamos cantidad de operaciones en peor caso como criterio para decidir cuándo un algoritmo es mejor que otro.
+\item Implementamos el algoritmo de búsqueda binaria de manera \textbf{recursiva} y de manera \textbf{iterativa}.
+\end{itemize}
+
+\end{frame}
+
+\end{document}
+
+

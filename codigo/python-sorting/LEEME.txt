@@ -1,0 +1,32 @@
+Demo de algoritmos de ordenamiento
+==================================
+
+Para ejecutar la demo, se debe tener python y pygame instalados.
+
+Tomar los archivos que contengan las funciones con los algoritmos de ordenamiento a comparar, y copiar en esta carpeta. Por ejemplo, dado el archivo "miordenamiento.py" con el siguiente contenido:
+
+def ordenar(arreglo):
+    for j in range(len(arreglo)):
+        for i in range(len(arreglo)):
+                if array[i] > array[i+1]:
+                    array[i], array[i+1] = array[i+1], array[i]
+                    
+Lo copiamos a la carpeta actual. El script a ejecutar es main.py, en él se debe definir qué archivos queremos comparar. Para esto, ubicar donde se crea el arreglo "algoritmos" y agregarlo como "nombredearchivo.nombredefuncion". Tambien se debe agregar el import del archivo que tiene la funcion como "import nombredearchivo". 
+
+Siguiendo con el ejemplo, tendriamos, en main.py:
+
+[Linea 4] 
+# Importo los archivos con las funciones a comparar
+import miordenamiento
+
+[Linea 19]
+# Creo la lista de algoritmos que quiero comparar
+algoritmos = [
+    (miordenamiento.ordenar, "Nombre de mi ordenamiento", array),
+] 
+
+De la misma manera se agregan tantos otros archivos con sus funciones de ordenamiento como se quiera.
+
+El programa se puede customizar para que corra a mayor o menor velocidad, modificando el parámetro fps de la invocación a SortDemo. También se puede cambiar el alto y ancho de cada "ventana" que muestra un algoritmo, estos valores están en pixeles.
+
+Para ejecutar la demo, basta hacer "python main.py" en la consola.

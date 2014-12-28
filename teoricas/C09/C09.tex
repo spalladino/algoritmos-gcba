@@ -1,0 +1,331 @@
+
+\usepackage[spanish]{babel}
+\usepackage[ansinew]{inputenc}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+
+\title{Arreglos Multidimensionales}
+\author{Algoritmos y Estructuras de Datos \\
+Programación Estructurada}
+\date{}
+
+\newcommand{\pseudohrule}{\vskip 5pt \hrule}
+
+\newenvironment{pseudo}[1][\normalsize]{
+\begin{figure}
+#1
+\begin{semiverbatim}
+}{
+\end{semiverbatim}
+\normalsize
+\end{figure}
+}
+
+\setlength{\parskip}{3pt plus 1pt minus 1pt}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Repaso}
+
+\uncover<1->{
+\begin{block}{Especificación}
+La especificación de un algoritmo es un contrato entre el programador y el usuario en donde se definen 
+cuales son los datos de entrada, la precondición y la postcondición del mismo.
+\end{block}
+}
+
+\uncover<2->{
+\begin{block}{Correctitud}
+Un algoritmo es correcto cuando siempre que vale la precondición podemos asegurar que el programa termina y la postcondición se cumple.
+\end{block}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Estructuras de datos}
+
+\begin{block}{Estructura de datos}
+Una estructura de datos es una forma de organizar un conjunto de datos de manera que puedan usarse eficientemente. Distintas estructuras de datos se corresponden a distintas aplicaciones, y cuál usemos dependerá de qué estemos queriendo modelar y cómo querramos manipular nuestros datos. 
+\end{block}
+
+\uncover<2->{
+Ejemplos de estructuras de datos son:
+\begin{itemize}
+\item arreglo
+\item lista
+\item conjunto
+\item diccionario
+\end{itemize}
+}
+
+\uncover<3>{Hoy veremos \alert{arreglos multidimensionales}.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Enunciado}
+
+Queremos mantener un registro de las notas de los 30 alumnos de un curso en cada una de las 12 materias. Es decir, para cada alumno, queremos saber qué nota sacó en lengua, en matemática, en computación, etc.
+
+Cada alumno tiene asignado \textit{un número de orden} del 0 al 29, y cada materia un identificador del 0 al 11.
+
+Sobre esos datos, queremos poder calcular el promedio de notas de un alumno, el promedio de notas de una materia, y el promedio total del curso en todas las materias.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Vamos por partes}
+
+Lo primero es encontrar una estructura de datos que nos permita modelar el problema. Supongamos que tenemos el siguiente ejemplo reducido:
+
+\begin{pseudo}[\small]
+Alumnos:
+ 0 Juan
+ 1 Carlos
+ 2 Marcos
+Materias:
+ 0 Matemática
+ 1 Lengua
+ 2 Computación 
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Arreglos Version 1}
+
+Podríamos guardar, por cada alumno, un arreglo con sus notas en cada materia, conteniendo la posición $k$ del arreglo su nota en la materia de identificador $k$. 
+
+\begin{pseudo}[\small]
+// Juan sacó 8 en matemática, 6 en lengua, 7 en computación
+int[] notasDeJuan = [8, 6, 7] 
+// Carlos sacó 10 en matemática, 4 en lengua, 9 en computación
+int[] notasDeCarlos = [10, 4, 9]
+// Marcos sacó 6 en matemática, 8 en lengua, 5 en computación
+int[] notasDeMarcos = [6, 8, 5]
+\end{pseudo}
+
+\uncover<2>{Vamos a terminar con el mismo problema que tuvimos cuando introdujimos el concepto de \textit{arreglos} por primera vez: manipular individualmente 30 variables \textit{notasDeAlumno} es muy poco feliz.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Arreglos Version 2}
+
+Podemos intentar entonces guardar, para cada materia, un arreglo con las notas de cada alumno. Así, en la posición $k$ del arreglo \textit{notasEnMatemática}, tendríamos la nota obtenida por el alumno con el número de orden $k$.
+
+\begin{pseudo}[\small]
+// En matemática, las notas fueron Juan 8, Carlos 10, Marcos 6
+int[] notasEnMatematica = [8, 10, 6] 
+// En lengua, Juan 6, Carlos 4 y Marcos 8
+int[] notasEnLengua = [6, 8, 5] 
+// En computación, Juan 7, Carlos 9 y Marcos 5
+int[] notasEnComputación = [7, 9, 5] 
+\end{pseudo}
+
+Si queremos saber cuánto sacó Carlos (número de orden $1$) en Matemática, basta hacer:
+\begin{pseudo}[\small]
+notasEnMatematica[1]
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Alumnos y Materias}
+
+Pero seguimos teniendo el mismo problema que antes, sólo que ahora tenemos que manejar un arreglo por materia en lugar de por alumno; si bien son menor cantidad, siguen siendo muchos como para poder manejarlos con facilidad.
+
+\uncover<2->{Lo que estamos necesitando es poder manejar una cantidad grande de materias y de alumnos con facilidad, y poder obtener eficientemente \textit{la nota del alumno con número de orden $i$ en la materia con identificador $j$}.
+
+\alert<3>{La solución es utilizar un arreglo con \textbf{dos dimensiones}.}}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Arreglos unidimensionales}
+
+Los arreglos que veníamos manejando hasta ahora eran \textit{unidimensionales}, es decir, eran una sucesión de valores que se ordenaban linealmente y se accedían mediante un índice.
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.4]{C09/Array.png}
+\end{figure}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Arreglos bidimensionales}
+
+Los elementos de un arreglo con \textit{dos dimensiones} se acceden mediante \textbf{dos} índices, uno para cada dimensión. Un arreglo bidimensional, entonces, es una \textit{matriz} de elementos.
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.4]{C09/Array2D.png}
+\end{figure}
+\end{center}
+
+Notar que ahora el arreglo ya no tiene un solo tamaño, sino que tiene un tamaño para cada dimensión; en este ejemplo, $5 \times 3$.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Y para qué nos sirve más de una dimensión?}
+
+Los arreglos bidimensionales pueden usarse para guardar elementos en dos \alert<2-3>{\textit{dimensiones}} distintas, como notas \alert<2>{por alumno} \alert<3>{por materia}.
+\vskip 5pt
+\uncover<4->{También pueden usarse para representar el tablero de un juego de ajedrez, de un sudoku, de una batalla naval, o de cualquier sistema de coordenadas que tenga dos dimensiones.}
+\vskip 5pt
+\uncover<5->{Incluso podemos representar los píxeles de una imagen como un arreglo bidimensional, guardando el color de cada píxel en cada posición (este es el formato bitmap de imágenes, o \texttt{bmp}).
+\begin{center}
+\begin{figure}
+\includegraphics[scale=3]{C09/Mundo.png}
+\end{figure}
+\end{center}
+}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Representación en memoria}
+
+En memoria los arreglos multidimensionales se guardan como un arreglo, con sus elementos ubicados en algún orden determinado.
+
+\begin{center}
+\begin{figure}
+{\includegraphics[scale=0.35]{C09/Array2DSmall.png}}
+\end{figure}
+\end{center}
+
+Por ejemplo, para guardar una matriz, podemos guardar una fila a continuación de la otra.
+
+\begin{center}
+\begin{figure}
+{\includegraphics[scale=0.25]{C09/Array2DSmallFlat.png}}
+\end{figure}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Representación en memoria}
+
+Para obtener un elemento en particular del arreglo, basta con hacer una cuenta sencilla teniendo las dimensiones del arreglo:
+
+\begin{pseudo}
+matriz[i,j] = arreglo[i * tamañoFila + j]
+\end{pseudo}
+
+Por ejemplo, el elemento \texttt{matriz[1,3]} se guarda en el índice $1 * 4 + 3 = 8$ del arreglo en memoria.
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.25]{C09/Array2DSmallFlatIndex.png}
+\end{figure}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Volviendo a las notas}
+
+Pensemos ahora cómo sería nuestro ejemplo de notas, alumnos y materias usando una matriz o arreglo de dos dimensiones. 
+\uncover<2->{
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.35]{C09/Notas2D.png}
+\end{figure}
+\end{center}
+
+En la posición $i,j$ de nuestra matriz de \textit{notas} guardamos la nota del alumno con número de orden $i$ en la materia con identificador $j$.
+}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Función promedio por materia}
+
+Ahora que tenemos nuestros datos guardados en una estructura, escribamos primero la especificación y luego el pseudocódigo de una de las funciones pedidas: calcular el promedio de notas en una de las materias.
+
+\begin{pseudo}[\small]
+Función promedioMateria
+Calcula el promedio de notas del curso en la materia dada
+Entrada: int \textit{m} identificador de la materia
+Salida:  float
+Pre:  el identificador de la materia está entre 0 y 11
+Post: la salida es el promedio de las notas de los 30 alumnos 
+      en esa materia
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Función promedio por materia}
+
+Pasemos ahora al pseudocódigo. Recordemos que las materias eran las \textit{columnas} de nuestra matriz \texttt{notas}, con lo que tenemos que recorrer todos los elementos de la columna \textit{m} para obtener el promedio.
+
+\begin{pseudo}[\small]
+Función promedioMateria
+Entrada: int \textit{m} identificador de la materia
+Salida:  float
+\pseudohrule
+float suma = 0
+para int i = 0 hasta 29
+  suma = suma + notas[i,m]
+fin
+devolver suma / 30
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Arreglos más multidimensionales}
+
+No solamente hay arreglos multidimensionales de dos dimensiones, podemos definir tantas dimensiones como querramos. Por ejemplo, podemos querer guardar un detalle de la temperatura en Buenos Aires por cada segundo de cada minuto de cada hora de cada día del año.
+
+\begin{pseudo}
+int temperatura[365][24][60][60]
+\end{pseudo}
+
+Hay que tener especial cuidado al agregar muchas dimensiones, ya que el tamaño del arreglo crece rápidamente: en este ejemplo estamos usando $365*24*60*60=31536000$ posiciones de memoria!
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resumiendo}
+
+Vimos una estructura más de datos, el arreglo multidimensional, que nos permite guardar datos indexados por más de una dimensión. Podemos trabajar con arreglos de la cantidad de dimensiones que querramos, pero con cuidado de no excedernos con el tamaño en memoria.
+
+\vskip 10pt
+
+Al igual que el arreglo tradicional, el multidimensionaltiene un tamaño fijo, con lo que nos sirve solamente para aquellos casos en los que sepamos inicialmente la cantidad de elementos con la que estaremos trabajando.
+
+\end{frame}
+
+\end{document}
+

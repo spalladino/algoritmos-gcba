@@ -1,0 +1,211 @@
+
+\usepackage[spanish]{babel}
+\usepackage[ansinew]{inputenc}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{latexsym}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+
+\title{Lenguajes Compilados e Interpretados}
+\author{Algoritmos y Estructuras de Datos \\
+Programación Estructurada}
+\date{}
+
+\setlength{\parskip}{10pt plus 1pt minus 1pt}
+\newcommand{\pseudohrule}{\vskip 5pt \hrule}
+
+\newenvironment{pseudo}[1][\normalsize]{
+\begin{figure}
+#1
+\begin{semiverbatim}
+}{
+\end{semiverbatim}
+\normalsize
+\end{figure}
+}
+
+\setlength{\parskip}{3pt plus 1pt minus 1pt}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Lenguajes}
+
+\begin{block}{Qué es un lenguaje de programación?}
+Un lenguaje de programación es un lenguaje artificial diseñado para comunicar instrucciones a una máquina.
+\end{block}
+
+Ejemplos de lenguajes de programación que se usan hoy en día son C++, Java, C\#, Ruby, Python, etc...
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Lenguaje ensamblador}
+
+\begin{block}{Qué instrucciones entiende una máquina?}
+El microprocesador de una computadora entiende un solo lenguaje: lenguaje ensamblador. Distintos microprocesadores con distinta \textit{arquitectura} pueden manejarse con distintos conjuntos de instrucciones.
+\end{block}
+
+\begin{pseudo}[\tiny]
+alloc loc0 = ar.pfs, 6, 5, 0, 0
+
+ld8 loc1 = [in0]
+ld8 loc2 = [in2]
+
+add loc3 = loc1, loc2
+cmp.ltu p1, p2 = loc3, r0
+(p2) cmp.leu p1, p0 = in4, loc3		
+
+(p1) sub loc2 = r0, loc2			
+(p1) st8 [in2] = loc2		
+(p1) add loc3 = loc1, loc2		
+
+st8 [in0] = loc3				
+
+mov out0 = loc2 
+br.call.sptk.many b0 = pintar 
+
+mov loc3 = r8 
+shl loc4 = loc3, loc5
+\end{pseudo}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Lenguajes de bajo y alto nivel}
+
+El lenguaje ensamblador es muy básico: tenemos muy pocas operaciones, no existen los tipos, la única estructura de control es \textit{ir a} otra instrucción en memoria, etc. No está pensado para que ninguna \textit{persona} tenga que lidiar con él, salvo casos excepcionales.
+
+Es por esto que existen lenguajes de \textbf{alto nivel} que nos proveen una sintaxis más amigable para darle instrucciones a la computadora. Los programas escritos en estos lenguajes se convierten a lenguaje ensamblador para que la computadora pueda ejecutarlos.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Lenguajes compilados}
+
+En los \textit{lenguajes compilados}, hay un \textbf{compilador} que se encarga de convertir el programa que nosotros estamos escribiendo en nuestro lenguaje favorito, a lenguaje ensamblador, generando un \textbf{ejecutable}.
+
+\begin{itemize}
+\item El programador escribe un programa en C++ \texttt{pingpong.cpp}
+\item El programa es compilado a código de máquina generando un ejecutable \texttt{pingpong.exe}
+\item El ejecutable se envía al usuario
+\item La computadora del usuario ejecuta el código de máquina en \texttt{pingpong.exe}
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Lenguajes interpretados}
+
+En los \textit{lenguajes interpretados}, por el contrario, el programa no se convierte a código de máquina, sino que hay un programa \textbf{intérprete} de dicho lenguaje que se encarga de realizar las acciones que éste le indica.
+
+\begin{itemize}
+\item El programador escribe un programa en Python \texttt{pacman.py}
+\item El programa se envía tal como está al usuario
+\item El intérprete de Python en la máquina del usuario ejecuta las instrucciones indicadas en \texttt{pacman.py}
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Ventajas de los lenguajes compilados}
+
+La ventaja fundamental de los lenguajes compilados es que suelen ser \textbf{más rápidos} que los interpretados, pues el código ya está en \textit{lenguaje ensamblador}, que puede ser ejecutado directamente por la máquina.
+\vskip 10pt
+\uncover<2->{Además, el usuario recibe un \textbf{ejecutable} que corre directamente en su computadora, sin la necesidad de tener el \textit{programa intérprete} para el lenguaje que corresponda.}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Ventajas de los lenguajes interpretados}
+
+Los lenguajes compilados tienen que ser compilados para una plataforma, es decir, para un procesador y sistema operativo en particular.
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.35]{C10/PythonDownloads.png}
+\end{figure}
+\end{center}
+
+Los lenguajes interpretados, en cambio, simplemente distribuyen sus fuentes, siendo las diferencias entre distintas plataformas manejadas por cada \textit{intérprete}.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Ventajas de los lenguajes interpretados}
+
+Como los lenguajes compilados deben generar el código que se va a ejecutar \textit{en tiempo de compilación}, suelen ser menos flexibles que los lenguajes interpretados. 
+\vskip 10pt
+\uncover<2->{Los programas hechos en lenguajes interpretados pueden modificar su propio código en tiempo de ejecución, esto es conocido como \textbf{metaprogramación}.}
+\vskip 10pt
+\uncover<3->{Los lenguajes interpretados también suelen ser más amigables para el programador y rápidos para programar.}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tipado estático}
+
+Decimos que un lenguaje tiene \textbf{tipado estático} cuando el chequeo de tipos se hace en \textit{tiempo de compilación}. Esto requiere que las variables que usamos indiquen a qué \textit{tipo de dato} se corresponden.
+
+\begin{pseudo}
+int miNumero = 10;
+miNumero.push_back(2); // Error de compilacion!
+\end{pseudo}
+
+Los lenguajes compilados como C++ tienen este sistema de tipos.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Tipado dinámico}
+
+Por el contrario, un lenguaje tiene \textbf{tipado dinámico} cuando el chequeo de tipos se hace en \textit{tiempo de ejecución}. Esto permite que solo los valores tengan un tipo de datos, pero no las variables.
+
+\begin{pseudo}
+miNumero = 10
+miNumero.push_back(2) // Falla en ejecucion
+\end{pseudo}
+
+El tipado dinámico hace que escribir los programas sea más rápido y sencillo, pero perdemos la seguridad de un sistema de tipos estático. Los lenguajes dinámicos como Python suelen tener este sistema de tipos.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Siempre hay grises...}
+
+No todos los lenguajes son o compilados o interpretados. Muchos lenguajes modernos, como Java o C\#, son una combinación entre ambos: el proceso de compilación genera un \textit{código intermedio} que es más fácil de manejar para el \textit{intérprete} que el lenguaje usado por el programador. 
+
+Estos lenguajes necesitan de un compilador y de un intérprete, pero tienen la ventaja de ser rápidos y ser independientes de plataforma.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Resumiendo}
+
+Diferencias entre lenguajes compilados e interpretados:
+
+\begin{itemize}
+\item El compilado genera un ejecutable en código de máquina que es ejecutado directamente; el interpretado requiere un intérprete en la máquina donde se va a ejecutar
+\item El ejecutable debe ser compilado para una plataforma en particular; el interpretado funciona en cualquier máquina que tenga un intérprete
+\item El compilado suele tener un sistema de tipos estático, que es más rígido pero ofrece más seguridad; contra el dinámico que suele tener el interpretado, que es más rápido para usar
+\end{itemize}
+
+\end{frame}
+\end{document}
+
